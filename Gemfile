@@ -17,6 +17,7 @@ group :development, :test do
   gem 'rspec-rails', '3.5.0.beta2'
   gem 'byebug'
   gem 'faker'
+  gem 'rubocop', require: false
 end
 
 group :development do

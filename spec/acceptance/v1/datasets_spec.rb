@@ -2,17 +2,8 @@ require 'acceptance_helper'
 
 module V1
   describe 'Datasets', type: :request do
-    let!(:datasets) do
-      datasets = []
-      datasets << create(:dataset)
-      datasets << create(:dataset)
-
-      datasets.each do |a|
-        a.touch
-      end
-
-      datasets
-    end
+    fixtures :rest_connectors
+    fixtures :datasets
 
     context 'For datasets list' do
       it 'Allows access datasets list' do
@@ -28,7 +19,7 @@ module V1
     end
 
     context 'For specific dataset' do
-      let!(:dataset) { datasets.first }
+      let!(:dataset) { Connector.first }
 
       it 'Allows access dataset details' do
         get "/datasets/#{dataset.id}"
