@@ -37,12 +37,6 @@ To run application:
 
     bin/rspec
 
-Run rspec for single engine:
-
-    rspec spec/core
-    rspec spec/rw_api
-    rspec spec/etc...
-
 ## Contributing
 
 1. Fork it!

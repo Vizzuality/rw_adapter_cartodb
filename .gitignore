@@ -17,7 +17,6 @@ config/database.yml
 # Ignore Byebug command history file.
 .byebug_history
 
-
 # Ignore MacOSX files
 /.DS_Store
 .DS_Store
@@ -28,4 +27,3 @@ config/database.yml
 
 # Ignore environment variables
 /.env
-
