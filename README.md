@@ -22,7 +22,7 @@ Install project dependencies:
 ## Usage
 
 First time execute:
-  checkout feature/users on this [repository]https://github.com/Vizzuality/resource-watch/tree/feature/users and execute:
+  checkout feature/users on this [repository](https://github.com/Vizzuality/resource-watch/tree/feature/users) and execute:
 
     bundle exec rake db:create
     bundle exec rake db:migrate
