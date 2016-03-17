@@ -1,4 +1,4 @@
-# Resource Watch Service Connector for CartoDB
+# Resource Watch Connector for CartoDB Service
 
 [![Build Status](https://travis-ci.org/Vizzuality/rw_adapter_cartodb.svg?branch=develop)](https://travis-ci.org/Vizzuality/rw_adapter_cartodb)
 
@@ -23,6 +23,8 @@ Install project dependencies:
 
 First time execute:
   Depends on [RW Database Maintenance](https://github.com/Vizzuality/rw_database/):
+
+    cp config/database.yml.sample config/database.yml
 
     bundle exec rake db:create
     bundle exec rake db:migrate
