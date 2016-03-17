@@ -17,7 +17,7 @@ class CartodbService
                      "?q=#{index_query}"
                    end
 
-    url = @connect_data_url[/[^\?]+/]
+    url =  URI.encode(@connect_data_url[/[^\?]+/])
     url += query_to_run
 
     url = URI.escape(url)
