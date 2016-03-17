@@ -22,7 +22,7 @@ Install project dependencies:
 ## Usage
 
 First time execute:
-  checkout feature/users on this [repository](https://github.com/Vizzuality/resource-watch/tree/feature/users) and execute:
+  Depends on [RW Database Maintenance](https://github.com/Vizzuality/rw_database/):
 
     bundle exec rake db:create
     bundle exec rake db:migrate
