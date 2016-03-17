@@ -18,8 +18,10 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  host: localhost
-  port: 5432
+  host: <%= ENV['RW_ADAPTER_CARTODB_POSTGRES_PORT_5432_TCP_ADDR'] %>
+  port: <%= ENV['RW_ADAPTER_CARTODB_POSTGRES_PORT_5432_TCP_PORT'] %>
+  username: postgres
+
 
 development:
   <<: *default
