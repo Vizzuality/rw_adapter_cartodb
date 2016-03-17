@@ -35,7 +35,7 @@ end
 # Server
 gem 'puma'
 gem 'dotenv-rails'
-gem 'redis', '~> 3.0'
+gem 'redis', '~> 3.2'
 gem 'rack-cors'
 gem 'rack-attack'
 gem 'bcrypt'
