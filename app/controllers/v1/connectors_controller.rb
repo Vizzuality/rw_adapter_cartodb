@@ -3,11 +3,6 @@ module V1
   	before_action :set_connector,    only: :show
     before_action :set_query_filter, only: :show
 
-  	def index
-      @connectors = RestConnector.all
-      render json: @connectors, each_serializer: ConnectorArraySerializer, root: false
-    end
-
     def show
       render json: @connector, serializer: ConnectorSerializer, query_filter: @query_filter, root: false
     end
