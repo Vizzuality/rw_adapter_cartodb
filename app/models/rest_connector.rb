@@ -1,11 +1,11 @@
-class Connector < ApplicationRecord
+class RestConnector < ApplicationRecord
   self.table_name = :rest_connectors
 
   FORMAT   = %w(JSON)
   PROVIDER = %w(CartoDb)
 
-  has_many :connector_params
-  has_one  :dataset
+  has_many :rest_connector_params, foreign_key: 'connector_id'
+  has_one  :dataset, as: :dateable, dependent: :destroy, inverse_of: :dateable
 
   def format_txt
     FORMAT[connector_format - 0]

@@ -1,7 +1,7 @@
-class ConnectorParam < ApplicationRecord
+class RestConnectorParam < ApplicationRecord
   self.table_name = :rest_connector_params
 
-	belongs_to :connector
+	belongs_to :rest_connector, foreign_key: 'connector_id'
 
 	PARAM_TYPES = %w(Header Query)
 

@@ -1,7 +1,7 @@
 class ConnectorArraySerializer < ActiveModel::Serializer
   attributes :id, :connector_name, :provider, :format
 
-  has_many :connector_params
+  has_many :rest_connector_params
   has_one  :dataset
 
   def provider
@@ -13,7 +13,7 @@ class ConnectorArraySerializer < ActiveModel::Serializer
   end
 
   def include_associations!
-    include! :connector_params, serializer: ParamsSerializer
+    include! :rest_connector_params, serializer: ParamsSerializer
     include! :dataset,          serializer: DatasetSerializer
   end
 end

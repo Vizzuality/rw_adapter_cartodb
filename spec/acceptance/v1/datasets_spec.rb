@@ -19,7 +19,7 @@ module V1
     end
 
     context 'For specific dataset' do
-      let!(:dataset) { Connector.first }
+      let!(:dataset) { RestConnector.first }
 
       it 'Allows access dataset details' do
         get "/datasets/#{dataset.id}"

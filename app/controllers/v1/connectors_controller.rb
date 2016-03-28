@@ -4,7 +4,7 @@ module V1
     before_action :set_query_filter, only: :show
 
   	def index
-      @connectors = Connector.all
+      @connectors = RestConnector.all
       render json: @connectors, each_serializer: ConnectorArraySerializer, root: false
     end
 
@@ -15,7 +15,7 @@ module V1
   	private
 
   	  def set_connector
-  	  	@connector = Connector.find(params[:id])
+  	  	@connector = RestConnector.find(params[:id])
   	  end
 
       def set_query_filter
