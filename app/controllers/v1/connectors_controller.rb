@@ -1,17 +1,17 @@
 module V1
   class ConnectorsController < ApplicationController
-  	before_action :set_connector
+    before_action :set_connector
     before_action :set_query_filter
 
     def show
       render json: @connector, serializer: ConnectorSerializer, query_filter: @query_filter, root: false
     end
 
-  	private
+    private
 
-  	  def set_connector
+      def set_connector
         @connector = RestConnector.new(params)
-  	  end
+      end
 
       def set_query_filter
         @query_filter = {}
