@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160315103405) do
+ActiveRecord::Schema.define(version: 20160328082837) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,26 +36,18 @@ ActiveRecord::Schema.define(version: 20160315103405) do
 
   add_index "api_users", ["user_id"], name: "index_api_users_on_user_id", unique: true, using: :btree
 
-  create_table "connector_rests", force: :cascade do |t|
-    t.string   "connector_name",               null: false
-    t.string   "connector_url",                null: false
-    t.integer  "connector_format", default: 0, null: false
-    t.string   "connector_path"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-  end
-
   create_table "datasets", force: :cascade do |t|
-    t.integer  "connector_id"
     t.jsonb    "table_columns"
     t.string   "table_name"
     t.integer  "format",        default: 1
     t.integer  "row_count"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.integer  "dateable_id"
+    t.string   "dateable_type"
   end
 
-  add_index "datasets", ["connector_id"], name: "index_datasets_on_connector_id", unique: true, using: :btree
+  add_index "datasets", ["dateable_id", "dateable_type"], name: "index_datasets_on_connector_and_connector_type", unique: true, using: :btree
 
   create_table "favourites", force: :cascade do |t|
     t.integer  "user_id"
@@ -108,6 +100,7 @@ ActiveRecord::Schema.define(version: 20160315103405) do
     t.integer  "connector_provider", default: 0
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
+    t.string   "attributes_path"
   end
 
   create_table "users", force: :cascade do |t|

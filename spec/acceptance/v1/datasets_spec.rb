@@ -5,24 +5,38 @@ module V1
     fixtures :rest_connectors
     fixtures :datasets
 
-    context 'For datasets list' do
-      it 'Allows access datasets list' do
-        get '/datasets'
-
-        expect(status).to eq(200)
-        expect(json.length).to eq(2)
-        expect(json[0]['connector_name']).to        eq('CartoDb test set')
-        expect(json[0]['provider']).to              eq('CartoDb')
-        expect(json[0]['format']).to                eq('JSON')
-        expect(json[0]['dataset']['table_name']).to eq('carts_test_endoint')
-      end
-    end
-
     context 'For specific dataset' do
-      let!(:dataset) { Connector.first }
+      let!(:params) {{'dataset': {
+                      'id': 23,
+                      'connector_name': 'Carto test api',
+                      'provider': 'CartoDb',
+                      'format': 'JSON',
+                      'rest_connector_params': [],
+                      'dataset_meta': {
+                        'connector_url': 'https://rschumann.cartodb.com/api/v2/sql?q=select%20*%20from%20public.carts_test_endoint',
+                        'connector_path': 'rows',
+                        'table_name': 'public.carts_test_endoint',
+                        'table_columns': {
+                          'pcpuid': {
+                            'type': 'string'
+                          },
+                          'the_geom': {
+                            'type': 'geometry'
+                          },
+                          'cartodb_id': {
+                            'type': 'number'
+                          },
+                          'the_geom_webmercator': {
+                            'type': 'geometry'
+                          }
+                        }
+                      }
+                    }}}
+
+      let!(:dataset_id) { 23 }
 
       it 'Allows access dataset details' do
-        get "/datasets/#{dataset.id}"
+        post "/query/#{dataset_id}", params
 
         data = json['data'][0]
 
@@ -33,12 +47,12 @@ module V1
       end
 
       it 'Allows access dataset details with select and order' do
-        get "/datasets/#{dataset.id}", { select: ['cartodb_id', 'pcpuid'] }, { order: 'pcpuid' }
+        post "/query/#{dataset_id}?select[]=cartodb_id&select[]=pcpuid&order[]=pcpuid", params
 
         data = json['data'][0]
 
         expect(status).to eq(200)
-        expect(data['cartodb_id']).to   eq(2)
+        expect(data['cartodb_id']).to   eq(5)
         expect(data['pcpuid']).not_to   be_nil
         expect(data['the_geom']).not_to be_present
       end

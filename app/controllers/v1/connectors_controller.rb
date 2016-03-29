@@ -1,22 +1,17 @@
 module V1
   class ConnectorsController < ApplicationController
-  	before_action :set_connector,    only: :show
-    before_action :set_query_filter, only: :show
-
-  	def index
-      @connectors = Connector.all
-      render json: @connectors, each_serializer: ConnectorArraySerializer, root: false
-    end
+    before_action :set_connector
+    before_action :set_query_filter
 
     def show
       render json: @connector, serializer: ConnectorSerializer, query_filter: @query_filter, root: false
     end
 
-  	private
+    private
 
-  	  def set_connector
-  	  	@connector = Connector.find(params[:id])
-  	  end
+      def set_connector
+        @connector = RestConnector.new(params)
+      end
 
       def set_query_filter
         @query_filter = {}
