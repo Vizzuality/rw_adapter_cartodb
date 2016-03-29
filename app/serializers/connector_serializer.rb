@@ -1,21 +1,7 @@
 class ConnectorSerializer < ActiveModel::Serializer
-  attributes :id, :connector_name, :provider, :format, :data
-
-  has_many :rest_connector_params
+  attributes :id, :connector_name, :provider, :format, :connector_url, :connector_path, :table_name, :rest_connector_params, :table_columns, :data
 
   def data
     object.data(@options[:query_filter])
-  end
-
-  def provider
-    object.provider_txt
-  end
-
-  def format
-    object.format_txt
-  end
-
-  def include_associations!
-    include! :rest_connector_params, serializer: ParamsSerializer
   end
 end

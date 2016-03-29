@@ -29,13 +29,13 @@ class CartodbService
         # cool
       elsif response.timed_out?
         # aw hell no
-        log("got a time out")
+        # log("got a time out")
       elsif response.code == 0
         # Could not get an http response, something's wrong.
-        log(response.return_message)
+        # log(response.return_message)
       else
         # Received a non-successful http response.
-        log("HTTP request failed: " + response.code.to_s)
+        # log("HTTP request failed: " + response.code.to_s)
       end
     end
 
@@ -52,14 +52,6 @@ class CartodbService
 
     def index_query
       "SELECT * FROM #{@dataset_table_name}"
-    end
-
-    def options_query
-      if @select.any?
-        "SELECT cartodb_id FROM #{@dataset_table_name}"
-      elsif @order.any?
-        "SELECT * FROM #{@dataset_table_name}"
-      end
     end
 
     def options_query
