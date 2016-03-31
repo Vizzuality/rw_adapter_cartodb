@@ -2,6 +2,11 @@ require 'typhoeus'
 require 'uri'
 
 class CartodbService
+  include Filters::FilterSelect
+  include Filters::FilterWhere
+  include Filters::FilterWhereNot
+  include Filters::FilterOrder
+
   def initialize(connect_data_url, connect_data_path, dataset_table_name, options = {})
     @connect_data_url   = connect_data_url
     @connect_data_path  = connect_data_path
@@ -55,16 +60,21 @@ class CartodbService
     end
 
     def options_query
-      to_select = @select.join(',') if @select.any?
-      to_order  = @order.join(',')  if @order.any?
+      # SELECT
+      filter = Filters::FilterSelect.apply_select(@select, @dataset_table_name)
 
-      filter =  if @select.any?
-                  "SELECT #{to_select} FROM #{@dataset_table_name}"
-                else
-                  "SELECT * FROM #{@dataset_table_name}"
-                end
+      # WHERE
+      filter += " WHERE" if (@not_filter.present? || @filter.present?)
+      filter += Filters::FilterWhere.apply_where(@filter) if @filter.present?
 
-      filter += " ORDER BY #{to_order}" if @order.any?
+      # WHERE NOT
+      filter += " AND" if (@not_filter.present? && @filter.present?)
+      filter += Filters::FilterWhereNot.apply_where_not(@not_filter) if @not_filter.present?
+
+      # ORDER
+      filter += Filters::FilterOrder.apply_order(@order) if @order.present?
+
+      # ToDo: Validate query structure
       filter
     end
 end

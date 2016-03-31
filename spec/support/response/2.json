@@ -1,0 +1,40 @@
+{
+    "rows": [
+        {
+            "cartodb_id": 5,
+            "pcpuid": "120171"
+        },
+        {
+            "cartodb_id": 2,
+            "pcpuid": "350558"
+        },
+        {
+            "cartodb_id": 3,
+            "pcpuid": "350659"
+        },
+        {
+            "cartodb_id": 4,
+            "pcpuid": "481347"
+        },
+        {
+            "cartodb_id": 1,
+            "pcpuid": "500001"
+        }
+    ],
+    "time": 0.029,
+    "fields": {
+        "cartodb_id": {
+            "type": "number"
+        },
+        "the_geom": {
+            "type": "geometry"
+        },
+        "the_geom_webmercator": {
+            "type": "geometry"
+        },
+        "pcpuid": {
+            "type": "string"
+        }
+    },
+    "total_rows": 5
+}

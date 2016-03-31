@@ -1,0 +1,50 @@
+{
+    "rows": [
+        {
+            "cartodb_id": 2,
+            "the_geom": "0101000020E610000000000000786515410000000078651541",
+            "the_geom_webmercator": null,
+            "pcpuid": "350558"
+        },
+        {
+            "cartodb_id": 3,
+            "the_geom": "0101000020E6100000000000000C671541000000000C671541",
+            "the_geom_webmercator": null,
+            "pcpuid": "350659"
+        },
+        {
+            "cartodb_id": 4,
+            "the_geom": "0101000020E6100000000000000C611D41000000000C611D41",
+            "the_geom_webmercator": null,
+            "pcpuid": "481347"
+        },
+        {
+            "cartodb_id": 5,
+            "the_geom": "0101000020E610000000000000B056FD4000000000B056FD40",
+            "the_geom_webmercator": null,
+            "pcpuid": "120171"
+        },
+        {
+            "cartodb_id": 1,
+            "the_geom": "0101000020E610000000000000806EF84000000000806EF840",
+            "the_geom_webmercator": null,
+            "pcpuid": "500001"
+        }
+    ],
+    "time": 0.029,
+    "fields": {
+        "cartodb_id": {
+            "type": "number"
+        },
+        "the_geom": {
+            "type": "geometry"
+        },
+        "the_geom_webmercator": {
+            "type": "geometry"
+        },
+        "pcpuid": {
+            "type": "string"
+        }
+    },
+    "total_rows": 5
+}
