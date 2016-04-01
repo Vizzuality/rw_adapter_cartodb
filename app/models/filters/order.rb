@@ -1,4 +1,4 @@
-module Filters::FilterOrder
+module Filters::Order
   def self.apply_order(order_params)
     to_order = order_params.join(',')
 
