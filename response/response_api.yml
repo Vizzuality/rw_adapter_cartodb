@@ -1,0 +1,54 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://rschumann.cartodb.com/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - rschumann.cartodb.com
+  response:
+    status:
+      code: 302
+      message: Found
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Tue, 29 Mar 2016 10:08:53 GMT
+      Content-Type:
+      - text/html; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 302 Found
+      X-Frame-Options:
+      - DENY
+      Location:
+      - https://rschumann.cartodb.com/me
+      X-Cartodb-Rev:
+      - 97f5a9b86184d0b0430cea0cd6d247d01fab2161
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Cache-Control:
+      - no-cache
+      X-Request-Id:
+      - 873ccdb3-56fb-4c69-cc23-d77838b115ed
+      X-Runtime:
+      - '0.004145'
+    body:
+      encoding: UTF-8
+      string: <html><body>You are being <a href="https://rschumann.cartodb.com/me">redirected</a>.</body></html>
+    http_version: 
+  recorded_at: Mon, 01 Jun 2015 10:00:04 GMT
+recorded_with: VCR 3.0.1

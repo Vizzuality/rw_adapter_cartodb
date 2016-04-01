@@ -2,6 +2,12 @@ require 'typhoeus'
 require 'uri'
 
 class CartodbService
+  include Filters::Select
+  include Filters::FilterWhere
+  include Filters::FilterWhereNot
+  include Filters::GroupBy
+  include Filters::Order
+
   def initialize(connect_data_url, connect_data_path, dataset_table_name, options = {})
     @connect_data_url   = connect_data_url
     @connect_data_path  = connect_data_path
@@ -28,19 +34,16 @@ class CartodbService
       if response.success?
         # cool
       elsif response.timed_out?
-        # aw hell no
-        # log("got a time out")
+        'got a time out'
       elsif response.code == 0
-        # Could not get an http response, something's wrong.
-        # log(response.return_message)
+        response.return_message
       else
-        # Received a non-successful http response.
-        # log("HTTP request failed: " + response.code.to_s)
+        'HTTP request failed: ' + response.code.to_s
       end
     end
 
     response = @request.run
-    JSON.parse(response.response_body)[@connect_data_path]
+    JSON.parse(response.response_body)[@connect_data_path] || JSON.parse(response.response_body)
   end
 
   private
@@ -55,16 +58,25 @@ class CartodbService
     end
 
     def options_query
-      to_select = @select.join(',') if @select.any?
-      to_order  = @order.join(',')  if @order.any?
+      # SELECT
+      filter = Filters::Select.apply_select(@select, @dataset_table_name, @aggr_func, @aggr_by)
 
-      filter =  if @select.any?
-                  "SELECT #{to_select} FROM #{@dataset_table_name}"
-                else
-                  "SELECT * FROM #{@dataset_table_name}"
-                end
+      # WHERE
+      filter += " WHERE" if (@not_filter.present? || @filter.present?)
+      filter += Filters::FilterWhere.apply_where(@filter) if @filter.present?
 
-      filter += " ORDER BY #{to_order}" if @order.any?
+      # WHERE NOT
+      filter += " AND" if (@not_filter.present? && @filter.present?)
+      filter += Filters::FilterWhereNot.apply_where_not(@not_filter) if @not_filter.present?
+
+      # GROUP BY
+      # /sql?q=SELECT iso,sum(population) FROM public.test_dataset_sebastian WHERE population <= 40525002 GROUP BY iso ORDER BY iso DESC
+      filter += Filters::GroupBy.apply_group_by(@aggr_by) if (@aggr_func.present? && @aggr_by.present?)
+
+      # ORDER
+      filter += Filters::Order.apply_order(@order) if @order.present?
+
+      # ToDo: Validate query structure
       filter
     end
 end
