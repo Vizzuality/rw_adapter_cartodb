@@ -4,7 +4,9 @@ class QueryParams < Hash
       select: params['select'].present? ? params['select'] : [],
       order:  params['order'].present?  ? params['order']  : [],
       filter: filter_params(params['filter']) || nil,
-      not_filter: filter_params(params['filter_not']) || nil
+      not_filter: filter_params(params['filter_not']) || nil,
+      aggr_by: params['aggr_by'].present? ? params['aggr_by'] : [],
+      aggr_func: params['aggr_func'] || nil
     }
 
     super(sanitized_params)
@@ -25,6 +27,6 @@ class QueryParams < Hash
     end
 
     def validate_params(filter)
-      filter.include?('==') || filter.include?('>=') || filter.include?('>>') || filter.include?('<=') || filter.include?('<<') || filter.include?('..') || filter.include?('><')
+      filter.include?('==') || filter.include?('>=') || filter.include?('>>') || filter.include?('<=') || filter.include?('<<') || filter.include?('><')
     end
 end

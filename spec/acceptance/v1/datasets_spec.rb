@@ -48,8 +48,26 @@ module V1
       end
 
       context 'With params' do
+        it 'Allows access cartoDB data with order ASC' do
+          post "/query/#{dataset_id}?order[]=cartodb_id", params: params
+
+          data = json['data'][0]
+
+          expect(status).to eq(200)
+          expect(data['cartodb_id']).to eq(1)
+        end
+
+        it 'Allows access cartoDB data with order DESC' do
+          post "/query/#{dataset_id}?order[]=-cartodb_id", params: params
+
+          data = json['data'][0]
+
+          expect(status).to eq(200)
+          expect(data['cartodb_id']).to eq(5)
+        end
+
         it 'Allows access cartoDB data details with select and order' do
-          post "/query/#{dataset_id}?select[]=cartodb_id&select[]=pcpuid&order[]=pcpuid", params: params
+          post "/query/#{dataset_id}?select[]=cartodb_id,pcpuid&order[]=pcpuid", params: params
 
           data = json['data'][0]
 
@@ -60,7 +78,7 @@ module V1
         end
 
         it 'Allows access cartoDB data details with select, filter and order DESC' do
-          post "/query/#{dataset_id}?select[]=cartodb_id&select[]=pcpuid&filter=(cartodb_id==1,2,4,5 <and> pcpuid><'350558'..'9506590')&order[]=-pcpuid", params: params
+          post "/query/#{dataset_id}?select[]=cartodb_id,pcpuid&filter=(cartodb_id==1,2,4,5 <and> pcpuid><'350558'..'9506590')&order[]=-pcpuid", params: params
 
           data = json['data'][0]
 
@@ -71,7 +89,7 @@ module V1
         end
 
         it 'Allows access cartoDB data details with select, filter_not and order' do
-          post "/query/#{dataset_id}?select[]=cartodb_id&select[]=pcpuid&filter_not=(cartodb_id>=4 <and> pcpuid><'500001'..'9506590')&order[]=pcpuid", params: params
+          post "/query/#{dataset_id}?select[]=cartodb_id,pcpuid&filter_not=(cartodb_id>=4 <and> pcpuid><'500001'..'9506590')&order[]=pcpuid", params: params
 
           data = json['data'][0]
 
