@@ -16,7 +16,7 @@ set :deploy_to, '/home/ubuntu/rw_adapter_cartodb'
 set :repository, 'https://github.com/Vizzuality/rw_adapter_cartodb.git'
 set :branch, 'master'
 set :rails_env, 'production'
-set :application, 'rw_dataset'
+set :application, 'rw_adapter_cartodb'
 set :foreman_sudo, 'ubuntu'
 
 # For system-wide RVM install.
