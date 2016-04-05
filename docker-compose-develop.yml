@@ -1,0 +1,17 @@
+web:
+  build: .
+  command: run
+  ports:
+    - "5003:5003"
+  links:
+    - postgres
+  volumes:
+    - .:/rw_adapter_cartodb
+
+postgres:
+  image: postgres
+  container_name: rw_database-postgres
+  ports:
+    - "5432:5432"
+  environment:
+    - POSTGRES_DB=resource_watch_development
