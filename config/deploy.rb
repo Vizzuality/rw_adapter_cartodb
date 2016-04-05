@@ -3,6 +3,7 @@ require 'mina/rails'
 require 'mina/git'
 # require 'mina/rbenv'  # for rbenv support. (http://rbenv.org)
 require 'mina/rvm'    # for rvm support. (http://rvm.io)
+require 'mina/foreman'
 
 # Basic settings:
 #   domain       - The hostname to SSH to.
@@ -15,13 +16,15 @@ set :deploy_to, '/home/ubuntu/rw_adapter_cartodb'
 set :repository, 'https://github.com/Vizzuality/rw_adapter_cartodb.git'
 set :branch, 'master'
 set :rails_env, 'production'
+set :application, 'rw_dataset'
+set :foreman_sudo, 'ubuntu'
 
 # For system-wide RVM install.
 #   set :rvm_path, '/usr/local/rvm/bin/rvm'
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['config/database.yml', 'config/secrets.yml', 'log']
+set :shared_paths, ['config/database.yml', 'config/secrets.yml', 'log', '.env']
 
 # Optional settings:
 #   set :user, 'foobar'    # Username in the server to SSH to.
@@ -54,6 +57,9 @@ task :setup => :environment do
   queue! %[touch "#{deploy_to}/#{shared_path}/config/secrets.yml"]
   queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/database.yml' and 'secrets.yml'."]
 
+  queue! %[touch "#{deploy_to}/#{shared_path}/.env"]
+  queue  %[echo "-----> Be sure to edit '/.env'."]
+
   if repository
     repo_host = repository.split(%r{@|://}).last.split(%r{:|\/}).first
     repo_port = /:([0-9]+)/.match(repository) && /:([0-9]+)/.match(repository)[1] || '22'
@@ -81,15 +87,12 @@ task :deploy => :environment do
     # invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
 
+    queue  "cd #{deploy_to}/#{current_path} ; rvmsudo bundle exec foreman export upstart /etc/init -a #{application} -u ubuntu -d #{deploy_to}/#{current_path} -l #{deploy_to}/#{shared_path}/log -f Procfile"
+
     to :launch do
-      queue "mkdir -p #{deploy_to}/#{current_path}/tmp/"
-      queue "touch #{deploy_to}/#{current_path}/tmp/restart.txt"
+      queue 'rvmsudo bundle exec foreman start'
     end
   end
-end
-
-task :restart do
-  queue 'sudo service nginx restart'
 end
 
 # For help in making your deploy script, see the Mina documentation:
