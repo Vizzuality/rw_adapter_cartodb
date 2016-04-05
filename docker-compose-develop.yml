@@ -8,15 +8,6 @@ web:
   volumes:
     - .:/rw_adapter_cartodb
 
-web:
-  build: .
-  command: run
-  ports:
-    - "5003:5003"
-  links:
-    - postgres
-  volumes:
-    - .:/rw_adapter_cartodb
 postgres:
   image: postgres
   container_name: rw_database-postgres
