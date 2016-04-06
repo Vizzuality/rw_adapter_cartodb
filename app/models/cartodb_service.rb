@@ -1,5 +1,6 @@
 require 'typhoeus'
 require 'uri'
+require 'oj'
 
 class CartodbService
   include Filters::Select
@@ -28,6 +29,7 @@ class CartodbService
 
     url = URI.escape(url)
 
+    hydra    = Typhoeus::Hydra.new max_concurrency: 100
     @request = Typhoeus::Request.new(url, method: :get, followlocation: true)
 
     @request.on_complete do |response|
@@ -42,8 +44,10 @@ class CartodbService
       end
     end
 
-    response = @request.run
-    JSON.parse(response.response_body)[@connect_data_path] || JSON.parse(response.response_body)
+    hydra.queue @request
+    hydra.run
+
+    Oj.load(@request.response.body.force_encoding(Encoding::UTF_8))[@connect_data_path] || Oj.load(@request.response.body.force_encoding(Encoding::UTF_8))
   end
 
   private
