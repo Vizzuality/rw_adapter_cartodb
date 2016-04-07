@@ -1,6 +1,6 @@
 module Filters::Select
   def self.apply_select(select_params, dataset_table_name, aggr_func, aggr_by)
-    to_select = if (aggr_by.present? && aggr_func.present?)
+    to_select = if aggr_by.present? && aggr_func.present?
                   select_params = select_params.join(',').split(',').delete_if { |p| p.in? aggr_by.join(',').split(',') }
                   select_params = select_params.map { |p| "#{aggr_func}(#{p}::integer) as #{p}" }
                   (select_params << aggr_by.join(',').split(',')).join(',')

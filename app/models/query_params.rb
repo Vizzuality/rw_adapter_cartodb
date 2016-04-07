@@ -10,7 +10,7 @@ class QueryParams < Hash
     }
 
     super(sanitized_params)
-    self.merge!(sanitized_params)
+    merge!(sanitized_params)
   end
 
   def self.sanitize(params)
@@ -20,9 +20,9 @@ class QueryParams < Hash
   private
 
     def filter_params(filter)
-      if (filter.present? && validate_params(filter))
+      if filter.present? && validate_params(filter)
         filter = filter.delete! '()'
-        filter.gsub('"', "'")
+        filter.tr('"', "'")
       end
     end
 
