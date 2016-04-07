@@ -3,12 +3,6 @@ require 'uri'
 require 'oj'
 
 class CartodbService
-  include Filters::Select
-  include Filters::FilterWhere
-  include Filters::FilterWhereNot
-  include Filters::GroupBy
-  include Filters::Order
-
   def initialize(connect_data_url, connect_data_path, dataset_table_name, options = {})
     @connect_data_url   = connect_data_url
     @connect_data_path  = connect_data_path
