@@ -29,7 +29,7 @@ end
 
 group :test do
   gem 'timecop'
-  # gem 'webmock'
+  gem 'codeclimate-test-reporter', require: nil
 end
 
 # Server
