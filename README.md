@@ -1,6 +1,6 @@
 # Resource Watch Connector for CartoDB Service
 
-[![Build Status](https://travis-ci.org/Vizzuality/rw_adapter_cartodb.svg?branch=master)](https://travis-ci.org/Vizzuality/rw_adapter_cartodb)
+[![Build Status](https://travis-ci.org/Vizzuality/rw_adapter_cartodb.svg?branch=master)](https://travis-ci.org/Vizzuality/rw_adapter_cartodb) [![Test Coverage](https://codeclimate.com/github/Vizzuality/rw_adapter_cartodb/badges/coverage.svg)](https://codeclimate.com/github/Vizzuality/rw_adapter_cartodb/coverage)
 
 TODO: Write a project description
 

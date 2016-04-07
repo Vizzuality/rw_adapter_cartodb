@@ -1,1 +1,1 @@
-web: bundle exec puma -t 5:5 -p 3005 -e production -S ~/puma -C config/puma.rb
+web: bundle exec puma -t 5:5 -p ${RW_CARTO_PORT:-3005} -e ${RW_CARTO_ENV:-development} -S ~/puma -C config/puma.rb

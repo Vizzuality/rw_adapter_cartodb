@@ -13,7 +13,7 @@ class DatasetParams < Hash
     }
 
     super(sanitized_params)
-    self.merge!(sanitized_params)
+    merge!(sanitized_params)
   end
 
   def self.sanitize(params)

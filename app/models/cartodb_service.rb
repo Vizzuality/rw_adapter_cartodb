@@ -1,13 +1,8 @@
 require 'typhoeus'
 require 'uri'
+require 'oj'
 
 class CartodbService
-  include Filters::Select
-  include Filters::FilterWhere
-  include Filters::FilterWhereNot
-  include Filters::GroupBy
-  include Filters::Order
-
   def initialize(connect_data_url, connect_data_path, dataset_table_name, options = {})
     @connect_data_url   = connect_data_url
     @connect_data_path  = connect_data_path
@@ -26,9 +21,8 @@ class CartodbService
     url =  URI.encode(@connect_data_url[/[^\?]+/])
     url += query_to_run
 
-    url = URI.escape(url)
-
-    @request = Typhoeus::Request.new(url, method: :get, followlocation: true)
+    hydra    = Typhoeus::Hydra.new max_concurrency: 100
+    @request = Typhoeus::Request.new(URI.escape(url), method: :get, followlocation: true)
 
     @request.on_complete do |response|
       if response.success?
@@ -42,8 +36,10 @@ class CartodbService
       end
     end
 
-    response = @request.run
-    JSON.parse(response.response_body)[@connect_data_path] || JSON.parse(response.response_body)
+    hydra.queue @request
+    hydra.run
+
+    Oj.load(@request.response.body.force_encoding(Encoding::UTF_8))[@connect_data_path] || Oj.load(@request.response.body.force_encoding(Encoding::UTF_8))
   end
 
   private
@@ -62,21 +58,21 @@ class CartodbService
       filter = Filters::Select.apply_select(@select, @dataset_table_name, @aggr_func, @aggr_by)
 
       # WHERE
-      filter += " WHERE" if (@not_filter.present? || @filter.present?)
+      filter += ' WHERE' if @not_filter.present? || @filter.present?
       filter += Filters::FilterWhere.apply_where(@filter) if @filter.present?
 
       # WHERE NOT
-      filter += " AND" if (@not_filter.present? && @filter.present?)
+      filter += ' AND' if @not_filter.present? && @filter.present?
       filter += Filters::FilterWhereNot.apply_where_not(@not_filter) if @not_filter.present?
 
       # GROUP BY
       # /sql?q=SELECT iso,sum(population) FROM public.test_dataset_sebastian WHERE population <= 40525002 GROUP BY iso ORDER BY iso DESC
-      filter += Filters::GroupBy.apply_group_by(@aggr_by) if (@aggr_func.present? && @aggr_by.present?)
+      filter += Filters::GroupBy.apply_group_by(@aggr_by) if @aggr_func.present? && @aggr_by.present?
 
       # ORDER
       filter += Filters::Order.apply_order(@order) if @order.present?
 
-      # ToDo: Validate query structure
+      # TODO: Validate query structure
       filter
     end
 end
