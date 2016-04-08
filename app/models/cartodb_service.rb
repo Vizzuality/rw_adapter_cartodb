@@ -56,22 +56,16 @@ class CartodbService
     def options_query
       # SELECT
       filter = Filters::Select.apply_select(@select, @dataset_table_name, @aggr_func, @aggr_by)
-
       # WHERE
-      filter += ' WHERE' if @not_filter.present? || @filter.present?
-      filter += Filters::FilterWhere.apply_where(@filter) if @filter.present?
-
+      filter += ' WHERE' if @filter.present? || @not_filter.present?
+      filter += Filters::FilterWhere.apply_where(@filter, nil) if @filter.present?
       # WHERE NOT
       filter += ' AND' if @not_filter.present? && @filter.present?
-      filter += Filters::FilterWhereNot.apply_where_not(@not_filter) if @not_filter.present?
-
+      filter += Filters::FilterWhere.apply_where(nil, @not_filter) if @not_filter.present?
       # GROUP BY
-      # /sql?q=SELECT iso,sum(population) FROM public.test_dataset_sebastian WHERE population <= 40525002 GROUP BY iso ORDER BY iso DESC
       filter += Filters::GroupBy.apply_group_by(@aggr_by) if @aggr_func.present? && @aggr_by.present?
-
       # ORDER
       filter += Filters::Order.apply_order(@order) if @order.present?
-
       # TODO: Validate query structure
       filter
     end
