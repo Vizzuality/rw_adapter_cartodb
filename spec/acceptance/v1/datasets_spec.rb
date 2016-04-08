@@ -124,12 +124,12 @@ module V1
         end
 
         it 'Allows access cartoDB data details for all filters without select and order' do
-          post "/query/#{dataset_id}?filter=(cartodb_id>=3)&filter_not=(cartodb_id==4 <and> pcpuid><'500001'..'9506590')", params: params
+          post "/query/#{dataset_id}?filter=(cartodb_id>=2)&filter_not=(cartodb_id==4 <and> pcpuid><'350659'..'9506590')", params: params
 
           data = json['data']
 
           expect(status).to eq(200)
-          expect(data[0]['cartodb_id']).to   eq(3)
+          expect(data[0]['cartodb_id']).to   eq(2)
           expect(data[0]['pcpuid']).not_to   be_nil
           expect(data[0]['the_geom']).not_to be_nil
           expect(data[1]['cartodb_id']).to   eq(5)

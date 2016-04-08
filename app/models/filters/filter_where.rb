@@ -23,58 +23,32 @@ module Filters
       filter_attr_6 = to_filter.map { |p| p.split('><') }.delete_if { |p| p.size < 2 }.reject(&:empty?).map { |p| p[0] } if filter_params.include?('><')
       filter_val_6  = to_filter.map { |p| p.split('><') }.delete_if { |p| p.size < 2 }.reject(&:empty?).map { |p| p[1].split('..') } if filter_params.include?('><')
 
+      filter_attr = []
+      1.upto(5) do |n|
+        filter_attr << eval('filter_attr_'+"#{n}")
+      end
+
       # TODO: "WHERE ... OR ..."
       filter = ''
 
-      if filter_attr_1.present?
-        operator = not_filter.present? ? 'NOT IN' : 'IN'
-        filter_attr_1.each_index do |i|
-          filter += ' AND' if i > 0
-          filter += " #{filter_attr_1[i]} #{operator} (#{filter_val_1[i]})"
+      1.upto(5) do |n|
+        operator_1 = not_filter.present? ? 'NOT IN' : 'IN'
+        operator_2 = not_filter.present? ? '<' : '>='
+        operator_3 = not_filter.present? ? '<=' : '>'
+        operator_4 = not_filter.present? ? '>' : '<='
+        operator_5 = not_filter.present? ? '>=' : '<'
+        if eval('filter_attr_'+"#{n}").present?
+          eval('filter_attr_'+"#{n}").each_index do |i|
+            filter += ' AND' if i > 0
+            filter += " #{eval('filter_attr_'+"#{n}")[i]} #{eval('operator_'+"#{n}")} (#{eval('filter_val_'+"#{n}")[i]})"
+            filter += ' AND' if filter_attr.compact.size > 1
+          end
         end
       end
 
-      filter += ' AND' if filter_attr_1.present? && filter_attr_2.present?
+      filter = filter.split(' ')[0...-1].join(' ') if filter.split(' ')[-1] == 'AND'
 
-      if filter_attr_2.present?
-        operator = not_filter.present? ? '<' : '>='
-        filter_attr_2.each_index do |i|
-          filter += ' AND' if i > 0
-          filter += " #{filter_attr_2[i]} #{operator} #{filter_val_2[i]}"
-        end
-      end
-
-      filter += ' AND' if (filter_attr_1.present? || filter_attr_2.present?) && filter_attr_3.present?
-
-      if filter_attr_3.present?
-        operator = not_filter.present? ? '<=' : '>'
-        filter_attr_3.each_index do |i|
-          filter += ' AND' if i > 0
-          filter += " #{filter_attr_3[i]} #{operator} #{filter_val_3[i]}"
-        end
-      end
-
-      filter += ' AND' if (filter_attr_1.present? || filter_attr_2.present? || filter_attr_3.present?) && filter_attr_4.present?
-
-      if filter_attr_4.present?
-        operator = not_filter.present? ? '>' : '<='
-        filter_attr_4.each_index do |i|
-          filter += ' AND' if i > 0
-          filter += " #{filter_attr_4[i]} #{operator} #{filter_val_4[i]}"
-        end
-      end
-
-      filter += ' AND' if (filter_attr_1.present? || filter_attr_2.present? || filter_attr_3.present? || filter_attr_4.present?) && filter_attr_5.present?
-
-      if filter_attr_5.present?
-        operator = not_filter.present? ? '>=' : '<'
-        filter_attr_5.each_index do |i|
-          filter += ' AND' if i > 0
-          filter += " #{filter_attr_5[i]} #{operator} #{filter_val_5[i]}"
-        end
-      end
-
-      filter += ' AND' if (filter_attr_1.present? || filter_attr_2.present? || filter_attr_3.present? || filter_attr_4.present? || filter_attr_5.present?) && filter_attr_6.present?
+      filter += ' AND' if filter_attr.compact.size > 0 && filter_attr_6.present?
 
       if filter_attr_6.present?
         operator = not_filter.present? ? 'NOT BETWEEN' : 'BETWEEN'
@@ -83,7 +57,6 @@ module Filters
           filter += " #{filter_attr_6[i]} #{operator} #{filter_val_6[i][0]} AND #{filter_val_6[i][1]}"
         end
       end
-
       filter
     end
   end

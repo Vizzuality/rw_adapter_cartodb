@@ -57,7 +57,7 @@ class CartodbService
       # SELECT
       filter = Filters::Select.apply_select(@select, @dataset_table_name, @aggr_func, @aggr_by)
       # WHERE
-      filter += ' WHERE' if @filter.present? || @not_filter.present?
+      filter += ' WHERE ' if @not_filter.present? || @filter.present?
       filter += Filters::FilterWhere.apply_where(@filter, nil) if @filter.present?
       # WHERE NOT
       filter += ' AND' if @not_filter.present? && @filter.present?
