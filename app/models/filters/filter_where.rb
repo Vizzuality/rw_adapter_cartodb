@@ -1,6 +1,8 @@
 module Filters
   class FilterWhere
-    def self.apply_where(filter_params)
+    def self.apply_where(filter, not_filter)
+      filter_params = not_filter.present? ? not_filter : filter
+
       to_filter = if filter_params.present? && (filter_params.include?('<and>') || filter_params.include?('<or>'))
                     filter_params.split(/<and>|<or>/)
                   elsif filter_params.present?
@@ -25,54 +27,60 @@ module Filters
       filter = ''
 
       if filter_attr_1.present?
+        operator = not_filter.present? ? 'NOT IN' : 'IN'
         filter_attr_1.each_index do |i|
           filter += ' AND' if i > 0
-          filter += " #{filter_attr_1[i]} IN (#{filter_val_1[i]})"
+          filter += " #{filter_attr_1[i]} #{operator} (#{filter_val_1[i]})"
         end
       end
 
       filter += ' AND' if filter_attr_1.present? && filter_attr_2.present?
 
       if filter_attr_2.present?
+        operator = not_filter.present? ? '<' : '>='
         filter_attr_2.each_index do |i|
           filter += ' AND' if i > 0
-          filter += " #{filter_attr_2[i]} >= #{filter_val_2[i]}"
+          filter += " #{filter_attr_2[i]} #{operator} #{filter_val_2[i]}"
         end
       end
 
       filter += ' AND' if (filter_attr_1.present? || filter_attr_2.present?) && filter_attr_3.present?
 
       if filter_attr_3.present?
+        operator = not_filter.present? ? '<=' : '>'
         filter_attr_3.each_index do |i|
           filter += ' AND' if i > 0
-          filter += " #{filter_attr_3[i]} > #{filter_val_3[i]}"
+          filter += " #{filter_attr_3[i]} #{operator} #{filter_val_3[i]}"
         end
       end
 
       filter += ' AND' if (filter_attr_1.present? || filter_attr_2.present? || filter_attr_3.present?) && filter_attr_4.present?
 
       if filter_attr_4.present?
+        operator = not_filter.present? ? '>' : '<='
         filter_attr_4.each_index do |i|
           filter += ' AND' if i > 0
-          filter += " #{filter_attr_4[i]} <= #{filter_val_4[i]}"
+          filter += " #{filter_attr_4[i]} #{operator} #{filter_val_4[i]}"
         end
       end
 
       filter += ' AND' if (filter_attr_1.present? || filter_attr_2.present? || filter_attr_3.present? || filter_attr_4.present?) && filter_attr_5.present?
 
       if filter_attr_5.present?
+        operator = not_filter.present? ? '>=' : '<'
         filter_attr_5.each_index do |i|
           filter += ' AND' if i > 0
-          filter += " #{filter_attr_5[i]} < #{filter_val_5[i]}"
+          filter += " #{filter_attr_5[i]} #{operator} #{filter_val_5[i]}"
         end
       end
 
       filter += ' AND' if (filter_attr_1.present? || filter_attr_2.present? || filter_attr_3.present? || filter_attr_4.present? || filter_attr_5.present?) && filter_attr_6.present?
 
       if filter_attr_6.present?
+        operator = not_filter.present? ? 'NOT BETWEEN' : 'BETWEEN'
         filter_attr_6.each_index do |i|
           filter += ' AND' if i > 0
-          filter += " #{filter_attr_6[i]} BETWEEN #{filter_val_6[i][0]} AND #{filter_val_6[i][1]}"
+          filter += " #{filter_attr_6[i]} #{operator} #{filter_val_6[i][0]} AND #{filter_val_6[i][1]}"
         end
       end
 
