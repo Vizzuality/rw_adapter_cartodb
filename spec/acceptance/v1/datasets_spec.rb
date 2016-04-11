@@ -134,6 +134,18 @@ module V1
           expect(data[0]['the_geom']).not_to be_nil
           expect(data[1]['cartodb_id']).to   eq(5)
         end
+
+        it 'Allows access cartoDB data details for all filters' do
+          post "/query/#{dataset_id}?select[]=cartodb_id,pcpuid&filter=(cartodb_id<<5 <and> pcpuid>='350558')&filter_not=(cartodb_id==4 <and> pcpuid><'350640'..'9506590')&order[]=-pcpuid", params: params
+
+          data = json['data']
+
+          expect(status).to eq(200)
+          expect(data.size).to             eq(1)
+          expect(data[0]['cartodb_id']).to eq(2)
+          expect(data[0]['pcpuid']).not_to be_nil
+          expect(data[0]['the_geom']).to   be_nil
+        end
       end
     end
   end
