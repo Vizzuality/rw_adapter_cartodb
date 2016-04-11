@@ -13,8 +13,10 @@ module Filters
                     elsif filter_params.present?
                       filter_params.partition(' ')
                     end
+
         filter_attr = []
         filter_val  = []
+
         5.times do |n|
           filter_attr << filter_attr_val(filter_params, to_filter, n, 0)
           filter_val  << filter_attr_val(filter_params, to_filter, n, 1)
@@ -36,7 +38,6 @@ module Filters
         end
 
         filter = filter.split(' ')[0...-1].join(' ') if filter.split(' ')[-1] == 'AND'
-
         filter += ' AND' if filter_attr.compact.size > 0 && filter_attr_btw.present?
 
         if filter_attr_btw.present?
