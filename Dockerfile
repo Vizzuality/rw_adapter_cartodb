@@ -12,6 +12,6 @@ ADD . /rw_adapter_cartodb
 
 WORKDIR /rw_adapter_cartodb
 
-EXPOSE 3000
+EXPOSE 3005
 
 ENTRYPOINT ["./entrypoint.sh"]

@@ -1,0 +1,19 @@
+{
+    "id": "rw_adapter_cartodb_v1",
+    "name": "RW Adapter CartoDB v1",
+    "urls": [{
+        "url": "/query/:dataset",
+        "method": "GET",
+        "paramProvider": "dataset",
+        "dataProvider": "dataset",
+        "filters":{
+            "provider": "CartoDb"
+        },
+        "endpoints": [{
+            "method": "POST",
+            "baseUrl": "http://192.168.1.57:3005",
+            "path": "/query/:dataset",
+            "data": ["dataset"]
+        }]
+    }]
+}

@@ -1,0 +1,60 @@
+#! /bin/bash
+
+case "$1" in
+    start)
+        ps -ef | grep 3005 | grep puma
+        if [ $? -eq 1 ]
+        then
+          case "$2" in
+            develop)
+              echo "Startting server..."
+              bundle exec puma -t 5:5 -d -p ${RW_CARTO_PORT:-3005} -e ${RW_CARTO_ENV:-development} -S ~/puma -C config/puma.rb
+              echo "Server running on port 3005 ;)!"
+              echo "Register RW CartoDb Adapter"
+              curl --request POST \
+                   --url http://192.168.99.100:8000/gateway/service \
+                   --header 'cache-control: no-cache' \
+                   --header 'content-type: application/json' \
+                   --data "$(cat lib/files/service_develop.json)"
+            ;;
+            esac
+        else
+          echo "Server already running on port 3005 ;)!"
+        fi
+        ;;
+    stop)
+        ps -ef | grep 3005 | grep puma
+        if [ $? -eq 1 ]
+        then
+          echo "Server is down."
+        else
+          echo "Stopping server..."
+          kill -9 $(lsof -i tcp:3005 -t)
+          echo "Server is down."
+        fi
+        ;;
+    status)
+        ps -ef | grep 3005 | grep puma
+        if [ $? -eq 1 ]
+        then
+          echo "Server is down."
+        else
+          echo "Server running on port 3005 ;)!"
+        fi
+        ;;
+    restart)
+        ps -ef | grep 3005 | grep puma
+        if [ $? -eq 1 ]
+        then
+          bundle exec puma -t 5:5 -d -p ${RW_CARTO_PORT:-3005} -e ${RW_CARTO_ENV:-development} -S ~/puma -C config/puma.rb
+        else
+          kill -9 $(lsof -i tcp:3005 -t) && bundle exec puma -t 5:5 -d -p ${RW_CARTO_PORT:-3005} -e ${RW_CARTO_ENV:-development} -S ~/puma -C config/puma.rb
+        fi
+        ;;
+  *)
+        echo "Usage: server {start develop - production|stop|status|restart}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0

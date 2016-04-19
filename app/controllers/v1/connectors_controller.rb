@@ -2,9 +2,10 @@ module V1
   class ConnectorsController < ApplicationController
     before_action :set_connector
     before_action :set_query_filter
+    before_action :set_uri
 
     def show
-      render json: @connector, serializer: ConnectorSerializer, query_filter: @query_filter, root: false
+      render json: @connector, serializer: ConnectorSerializer, query_filter: @query_filter, root: false, uri: @uri
     end
 
     private
@@ -23,6 +24,16 @@ module V1
         # For group
         @query_filter['aggr_by']   = params[:aggr_by]   if params[:aggr_by].present?
         @query_filter['aggr_func'] = params[:aggr_func] if params[:aggr_func].present?
+      end
+
+      def api_gateway_url
+        ENV['API_GATEWAY_URL'] || 'http://ec2-52-23-163-254.compute-1.amazonaws.com'
+      end
+
+      def set_uri
+        @uri = {}
+        @uri['api_gateway_url'] = api_gateway_url
+        @uri['full_path']       = request.fullpath
       end
   end
 end

@@ -8,24 +8,21 @@ module V1
                       'connector_name': 'Carto test api',
                       'provider': 'CartoDb',
                       'format': 'JSON',
-                      'rest_connector_params': [],
-                      'dataset_meta': {
-                        'connector_url': 'https://rschumann.cartodb.com/api/v2/sql?q=select%20*%20from%20public.carts_test_endoint',
-                        'connector_path': 'rows',
-                        'table_name': 'public.carts_test_endoint',
-                        'table_columns': {
-                          'pcpuid': {
-                            'type': 'string'
-                          },
-                          'the_geom': {
-                            'type': 'geometry'
-                          },
-                          'cartodb_id': {
-                            'type': 'number'
-                          },
-                          'the_geom_webmercator': {
-                            'type': 'geometry'
-                          }
+                      'connector_url': 'https://rschumann.cartodb.com/api/v2/sql?q=select%20*%20from%20public.carts_test_endoint',
+                      'connector_path': 'rows',
+                      'table_name': 'public.carts_test_endoint',
+                      'data_attributes': {
+                        'pcpuid': {
+                          'type': 'string'
+                        },
+                        'the_geom': {
+                          'type': 'geometry'
+                        },
+                        'cartodb_id': {
+                          'type': 'number'
+                        },
+                        'the_geom_webmercator': {
+                          'type': 'geometry'
                         }
                       }
                     }}}
