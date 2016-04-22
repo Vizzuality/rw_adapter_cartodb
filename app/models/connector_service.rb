@@ -3,22 +3,14 @@ require 'uri'
 require 'oj'
 
 class ConnectorService
+  include RequestOnComplete
+
   class << self
     def establish_connection(url, method, followlocation=false, params={})
       hydra    = Typhoeus::Hydra.new max_concurrency: 100
       @request = ::Typhoeus::Request.new(URI.escape(url), method: method, followlocation: followlocation, params: params)
 
-      @request.on_complete do |response|
-        if response.success?
-          # cool
-        elsif response.timed_out?
-          'got a time out'
-        elsif response.code == 0
-          response.return_message
-        else
-          'HTTP request failed: ' + response.code.to_s
-        end
-      end
+      request_on_complete(@request)
 
       hydra.queue @request
       hydra.run
