@@ -47,6 +47,7 @@ module V1
 
       def gateway_urls
         @api_dataset_meta_url = ENV['API_DATASET_META_URL']
+        @api_gateway_url      = ENV['API_GATEWAY_URL']
       end
 
       def notify(status=nil)

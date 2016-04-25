@@ -18,7 +18,7 @@ class ConnectorService
 
     def connect_to_dataset_service(dataset_id, status)
       status   = status.present? ? 1 : 2
-      params   = { "dataset" => { "dataset_attributes" => { "status" => status } } }
+      params   = { dataset: { dataset_attributes: { status: status } } }
       url      = URI.decode("#{ENV['API_DATASET_META_URL']}/#{dataset_id}")
 
       establish_connection(url, 'put', false, params)

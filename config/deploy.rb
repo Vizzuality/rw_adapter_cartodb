@@ -99,7 +99,7 @@ task deploy: :environment do
           fuser -n tcp -k 3005 && bundle exec puma -d -t 5:5 -d -p 3005 -e production -S ~/puma -C config/puma.rb
         fi
         echo "Starting sidekiq..."
-        bundle exec sidekiq -C config/sidekiq.yml
+        bundle exec sidekiq -C config/sidekiq.yml -e production
       ]
     end
   end

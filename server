@@ -54,8 +54,6 @@ case "$1" in
         else
           kill -9 $(lsof -i tcp:3005 -t) && bundle exec puma -t 5:5 -d -p ${RW_CARTO_PORT:-3005} -e ${RW_CARTO_ENV:-development} -S ~/puma -C config/puma.rb
         fi
-        echo "Stopping sidekiq..."
-        bundle exec sidekiqctl stop tmp/pids/sidekiq.pid 0
         echo "Starting sidekiq..."
         bundle exec sidekiq -C config/sidekiq.yml
         ;;
