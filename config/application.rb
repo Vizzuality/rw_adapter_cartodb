@@ -4,6 +4,7 @@ require "rails"
 # Pick the frameworks you want:
 require "active_model/railtie"
 require "active_job/railtie"
+require "active_record/railtie"
 require "action_controller/railtie"
 require "action_mailer/railtie"
 require "action_view/railtie"
@@ -40,6 +41,7 @@ Bundler.require(*Rails.groups)
 
 module RwAdapterCartodb
   class Application < Rails::Application
+    config.active_record.schema_format = :sql
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -50,9 +52,8 @@ module RwAdapterCartodb
     config.api_only = true
     config.autoload_paths += Dir[Rails.root.join('app', 'models', '{**}')]
 
-    # config.middleware.use Rack::Attack
-
     config.generators do |g|
+      g.orm :active_record, primary_key_type: :uuid
       g.test_framework :rspec,
         fixtures: true,
         routing_specs: true,

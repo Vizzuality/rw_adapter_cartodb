@@ -7,9 +7,11 @@ case "$1" in
         then
           case "$2" in
             develop)
-              echo "Startting server..."
+              echo "Starting server..."
               bundle exec puma -t 5:5 -d -p ${RW_CARTO_PORT:-3005} -e ${RW_CARTO_ENV:-development} -S ~/puma -C config/puma.rb
               echo "Server running on port 3005 ;)!"
+              echo "Starting sidekiq..."
+              bundle exec sidekiq -C config/sidekiq.yml
               echo "Register RW CartoDb Adapter"
               curl --request POST \
                    --url http://192.168.99.100:8000/gateway/service \
@@ -32,6 +34,8 @@ case "$1" in
           kill -9 $(lsof -i tcp:3005 -t)
           echo "Server is down."
         fi
+        echo "Stopping sidekiq..."
+        bundle exec sidekiqctl stop tmp/pids/sidekiq.pid 0
         ;;
     status)
         ps -ef | grep 3005 | grep puma
@@ -50,6 +54,8 @@ case "$1" in
         else
           kill -9 $(lsof -i tcp:3005 -t) && bundle exec puma -t 5:5 -d -p ${RW_CARTO_PORT:-3005} -e ${RW_CARTO_ENV:-development} -S ~/puma -C config/puma.rb
         fi
+        echo "Starting sidekiq..."
+        bundle exec sidekiq -C config/sidekiq.yml
         ;;
   *)
         echo "Usage: server {start develop - production|stop|status|restart}" >&2

@@ -15,5 +15,13 @@
             "path": "/query/:dataset",
             "data": ["dataset"]
         }]
+    },{
+        "url": "/rest-datasets/cartodb",
+        "method": "POST",
+        "endpoints": [{
+            "method": "POST",
+            "baseUrl": "http://localhost:3005",
+            "path": "/datasets"
+        }]
     }]
 }
