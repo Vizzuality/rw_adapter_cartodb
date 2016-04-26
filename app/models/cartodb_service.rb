@@ -3,6 +3,8 @@ require 'uri'
 require 'oj'
 
 class CartodbService
+  include RequestOnComplete
+
   def initialize(connect_data_url, connect_data_path, dataset_table_name, options = {})
     @connect_data_url   = connect_data_url
     @connect_data_path  = connect_data_path
@@ -24,17 +26,7 @@ class CartodbService
     hydra    = Typhoeus::Hydra.new max_concurrency: 100
     @request = Typhoeus::Request.new(URI.escape(url), method: :get, followlocation: true)
 
-    @request.on_complete do |response|
-      if response.success?
-        # cool
-      elsif response.timed_out?
-        'got a time out'
-      elsif response.code == 0
-        response.return_message
-      else
-        'HTTP request failed: ' + response.code.to_s
-      end
-    end
+    self.class.request_on_complete(@request)
 
     hydra.queue @request
     hydra.run

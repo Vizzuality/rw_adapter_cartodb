@@ -3,47 +3,31 @@ require 'acceptance_helper'
 module V1
   describe 'Datasets', type: :request do
     context 'For specific dataset' do
-      let!(:params) {{'dataset': {
-                      'id': 23,
-                      'connector_name': 'Carto test api',
-                      'provider': 'CartoDb',
-                      'format': 'JSON',
-                      'rest_connector_params': [],
-                      'dataset_meta': {
-                        'connector_url': 'https://rschumann.cartodb.com/api/v2/sql?q=select%20*%20from%20public.carts_test_endoint',
-                        'connector_path': 'rows',
-                        'table_name': 'public.carts_test_endoint',
-                        'table_columns': {
-                          'pcpuid': {
-                            'type': 'string'
-                          },
-                          'the_geom': {
-                            'type': 'geometry'
-                          },
-                          'cartodb_id': {
-                            'type': 'number'
-                          },
-                          'the_geom_webmercator': {
-                            'type': 'geometry'
-                          }
-                        }
-                      }
-                    }}}
+      fixtures :datasets
 
-      let!(:dataset_id) { 23 }
+      let!(:dataset_id) { Dataset.first.id }
+      let!(:params) {{"dataset": {
+                      "id": "#{dataset_id}",
+                      "provider": "CartoDb",
+                      "format": "JSON",
+                      "name": "Carto test api",
+                      "data_path": "rows",
+                      "attributes_path": "fields",
+                      "connector_url": "https://rschumann.cartodb.com/api/v2/sql?q=select%20*%20from%20public.carts_test_endoint",
+                      "table_name": "public.carts_test_endoint",
+                    }}}
 
       context 'Without params' do
         it 'Allows access cartoDB data' do
-          # raw_response_file = File.new('spec/support/response/1.json').read
-          # stub_request(:any, /rschumann.cartodb.com/).to_return(body: raw_response_file)
           post "/query/#{dataset_id}", params: params
 
           data = json['data'][0]
 
           expect(status).to eq(200)
-          expect(data['cartodb_id']).not_to be_nil
-          expect(data['pcpuid']).not_to     be_nil
-          expect(data['the_geom']).to       be_present
+          expect(data['cartodb_id']).not_to  be_nil
+          expect(data['pcpuid']).not_to      be_nil
+          expect(data['the_geom']).to        be_present
+          expect(json['data_attributes']).to be_present
         end
       end
 

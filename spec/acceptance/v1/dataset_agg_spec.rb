@@ -3,43 +3,19 @@ require 'acceptance_helper'
 module V1
   describe 'Datasets AGG', type: :request do
     context 'Aggregation for specific dataset' do
-      let!(:params) {{'dataset': {
-                      'id': 29,
-                      'connector_name': 'Carto test api countries update',
-                      'provider': 'CartoDb',
-                      'format': 'JSON',
-                      'rest_connector_params': [],
-                      'dataset_meta': {
-                        'connector_url': 'https://simbiotica.cartodb.com/api/v2/sql?q=select * from public.test_dataset_sebastian',
-                        'connector_path': 'rows',
-                        'table_name': 'public.test_dataset_sebastian',
-                        'table_columns': {
-                          'iso': {
-                            'type': 'string'
-                          },
-                          'name': {
-                            'type': 'string'
-                          },
-                          'year': {
-                            'type': 'string'
-                          },
-                          'the_geom': {
-                            'type': 'geometry'
-                          },
-                          'cartodb_id': {
-                            'type': 'number'
-                          },
-                          'population': {
-                            'type': 'number'
-                          },
-                          'the_geom_webmercator': {
-                            'type': 'geometry'
-                          }
-                        }
-                      }
-                    }}}
+      fixtures :datasets
 
-      let!(:dataset_id) { 29 }
+      let!(:dataset_id) { Dataset.last.id }
+      let!(:params) {{"dataset": {
+                      "id": "#{dataset_id}",
+                      "provider": "CartoDb",
+                      "format": "JSON",
+                      "name": "Carto test api",
+                      "data_path": "rows",
+                      "attributes_path": "fields",
+                      "connector_url": "https://simbiotica.cartodb.com/api/v2/sql?q=select * from public.test_dataset_sebastian",
+                      "table_name": "public.test_dataset_sebastian"
+                    }}}
 
       context 'Aggregation with params' do
         it 'Allows aggregate cartoDB data by one attribute' do
@@ -48,8 +24,9 @@ module V1
           data = json['data']
 
           expect(status).to eq(200)
-          expect(data.size).to      eq(2)
-          expect(data[0]['iso']).to eq('AUS')
+          expect(data.size).to               eq(2)
+          expect(data[0]['iso']).to          eq('AUS')
+          expect(json['data_attributes']).to be_present
         end
 
         it 'Allows aggregate cartoDB data by two attributes with order DESC' do
@@ -68,8 +45,8 @@ module V1
 
           data = json['data']
 
-          expect(status).to eq(200)
-          expect(data.size).to      eq(1)
+          expect(status).to           eq(200)
+          expect(data.size).to        eq(1)
           expect(data['error'][0]).to eq('column "isoss" does not exist')
         end
       end

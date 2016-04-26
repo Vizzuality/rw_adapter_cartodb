@@ -7,6 +7,7 @@ require File.expand_path('../../config/environment', __FILE__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'spec_helper'
 require 'rspec/rails'
+require 'rspec/active_job'
 
 # require 'webmock/rspec'
 # WebMock.disable_net_connect!(allow_localhost: true)
@@ -44,6 +45,14 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |c|
     c.syntax = [:should, :expect]
+  end
+
+  config.include(RSpec::ActiveJob)
+
+  # clean out the queue after each spec
+  config.after(:each) do
+    ActiveJob::Base.queue_adapter.enqueued_jobs = []
+    ActiveJob::Base.queue_adapter.performed_jobs = []
   end
 
   # RSpec Rails can automatically mix in different behaviours to your tests
