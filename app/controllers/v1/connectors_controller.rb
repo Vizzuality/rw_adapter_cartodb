@@ -25,6 +25,7 @@ module V1
       @dataset.destroy
       begin
         render json: { message: 'Dataset deleted' }, status: 200
+        Dataset.notifier(params[:id], 'deleted') if ENV['API_DATASET_META_URL'].present?
       rescue ActiveRecord::RecordNotDestroyed
         return render json: @dataset.erors, message: 'Dataset could not be deleted', status: 422
       end

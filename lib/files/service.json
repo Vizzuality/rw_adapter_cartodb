@@ -23,5 +23,13 @@
             "baseUrl": "http://localhost:3005",
             "path": "/datasets"
         }]
+    },{
+        "url": "/rest-datasets/cartodb/:id",
+        "method": "DELETE",
+        "endpoints": [{
+            "method": "DELETE",
+            "baseUrl": "http://localhost:3005",
+            "path": "/datasets/:id"
+        }]
     }]
 }
