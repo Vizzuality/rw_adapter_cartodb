@@ -23,5 +23,13 @@
             "baseUrl": "http://192.168.1.57:3005",
             "path": "/datasets"
         }]
+    },{
+        "url": "/rest-datasets/cartodb/:id",
+        "method": "DELETE",
+        "endpoints": [{
+            "method": "DELETE",
+            "baseUrl": "http://192.168.1.57:3005",
+            "path": "/datasets/:id"
+        }]
     }]
 }
