@@ -4,16 +4,6 @@ require 'oj'
 
 class ConnectorService
   class << self
-    def establish_connection(url, method, params={})
-      @c = Curl::Easy.new(URI.escape(url), params) do |curl|
-        curl.headers['Accept']       = 'application/json'
-        curl.headers['Content-Type'] = 'application/json'
-        curl.method = method
-      end
-
-      @c.perform
-    end
-
     def connect_to_dataset_service(dataset_id, status)
       status   = case status
                  when 'saved' then 1

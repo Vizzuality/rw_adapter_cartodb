@@ -21,10 +21,10 @@ class CartodbService
     url =  URI.encode(@connect_data_url[/[^\?]+/])
     url += query_to_run
 
-    @c = Curl::Easy.new(URI.escape(url)) do |curl|
-           curl.headers['Accept'] = 'application/json'
-         end
-    @c.perform
+    @c = Curl::Easy.http_get(URI.escape(url)) do |curl|
+      curl.headers['Accept']       = 'application/json'
+      curl.headers['Content-Type'] = 'application/json'
+    end
 
     Oj.load(@c.body_str.force_encoding(Encoding::UTF_8))[@connect_data_path] || Oj.load(@c.body_str.force_encoding(Encoding::UTF_8))
   end
