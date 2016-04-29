@@ -3,8 +3,6 @@ require 'uri'
 require 'oj'
 
 class CartodbService
-  include RequestOnComplete
-
   def initialize(connect_data_url, connect_data_path, dataset_table_name, options = {})
     @connect_data_url   = connect_data_url
     @connect_data_path  = connect_data_path
@@ -23,13 +21,8 @@ class CartodbService
     url =  URI.encode(@connect_data_url[/[^\?]+/])
     url += query_to_run
 
-    hydra    = Typhoeus::Hydra.new max_concurrency: 100
-    @request = Typhoeus::Request.new(URI.escape(url), method: :get, followlocation: true)
-
-    self.class.request_on_complete(@request)
-
-    hydra.queue @request
-    hydra.run
+    @request = Typhoeus::Request.new(URI.escape(url), method: :get, headers: { 'Accept' => 'application/json' })
+    @request.run
 
     Oj.load(@request.response.body.force_encoding(Encoding::UTF_8))[@connect_data_path] || Oj.load(@request.response.body.force_encoding(Encoding::UTF_8))
   end
