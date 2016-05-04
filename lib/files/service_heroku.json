@@ -1,0 +1,35 @@
+{
+    "id": "rw_adapter_cartodb_v1",
+    "name": "RW Adapter CartoDB v1",
+    "urls": [{
+        "url": "/query/:dataset",
+        "method": "GET",
+        "paramProvider": "dataset",
+        "dataProvider": "dataset",
+        "filters":{
+            "provider": "CartoDb"
+        },
+        "endpoints": [{
+            "method": "POST",
+            "baseUrl": "https://rw-adapter-cartodb.herpkuapp.com",
+            "path": "/query/:dataset",
+            "data": ["dataset"]
+        }]
+    },{
+        "url": "/rest-datasets/cartodb",
+        "method": "POST",
+        "endpoints": [{
+            "method": "POST",
+            "baseUrl": "https://rw-adapter-cartodb.herpkuapp.com",
+            "path": "/datasets"
+        }]
+    },{
+        "url": "/rest-datasets/cartodb/:id",
+        "method": "DELETE",
+        "endpoints": [{
+            "method": "DELETE",
+            "baseUrl": "https://rw-adapter-cartodb.herpkuapp.com",
+            "path": "/datasets/:id"
+        }]
+    }]
+}
