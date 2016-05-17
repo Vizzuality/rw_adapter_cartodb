@@ -45,6 +45,7 @@ module V1
         @query_filter = {}
         @query_filter['select']     = params[:select] if params[:select].present?
         @query_filter['order']      = params[:order]  if params[:order].present?
+        @query_filter['limit']      = params[:limit]  if params[:limit].present?
         # For Filter
         @query_filter['filter']     = params[:filter]     if params[:filter].present?
         @query_filter['filter_not'] = params[:filter_not] if params[:filter_not].present?

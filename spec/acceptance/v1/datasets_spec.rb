@@ -130,6 +130,27 @@ module V1
           expect(data[0]['pcpuid']).not_to be_nil
           expect(data[0]['the_geom']).to   be_nil
         end
+
+        it 'Allows access cartoDB data with limit rows' do
+          post "/query/#{dataset_id}?limit=2", params: params
+
+          expect(status).to eq(200)
+          expect(json['data'].length).to eq(2)
+        end
+
+        it 'Allows access cartoDB data with limit rows as array filter' do
+          post "/query/#{dataset_id}?limit[]=1", params: params
+
+          expect(status).to eq(200)
+          expect(json['data'].length).to eq(1)
+        end
+
+        it 'Allows access cartoDB data details for all filters without select and order' do
+          post "/query/#{dataset_id}?select[]=cartodb_id&filter=(cartodb_id>=1)&filter_not=(cartodb_id==4 <and> pcpuid><'500001'..'9506590')&order[]=-pcpuid&limit=2", params: params
+
+          expect(status).to eq(200)
+          expect(json['data'].length).to eq(2)
+        end
       end
     end
   end
