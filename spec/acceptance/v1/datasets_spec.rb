@@ -33,6 +33,19 @@ module V1
       end
 
       context 'With params' do
+        it 'Allows access all available cartoDB data with limit all' do
+          post "/query/#{dataset_id}?limit=all", params: params
+
+          data = json['data'][0]
+
+          expect(status).to eq(200)
+          expect(data['cartodb_id']).not_to  be_nil
+          expect(data['pcpuid']).not_to      be_nil
+          expect(data['the_geom']).to        be_present
+          expect(json['data_attributes']).to be_present
+          expect(json['data'].length).to     eq(5)
+        end
+
         it 'Allows access cartoDB data with order ASC' do
           post "/query/#{dataset_id}?order[]=cartodb_id", params: params
 
