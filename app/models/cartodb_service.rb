@@ -54,7 +54,7 @@ class CartodbService
       # ORDER
       filter += Filters::Order.apply_order(@order) if @order.present?
       # Limit
-      filter += Filters::Limit.apply_limit(@limit) if @limit.present?
+      filter += Filters::Limit.apply_limit(@limit) if @limit.present? || !@limit.include?('all')
       # TODO: Validate query structure
       filter
     end

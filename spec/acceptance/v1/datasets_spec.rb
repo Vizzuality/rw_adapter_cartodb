@@ -18,7 +18,7 @@ module V1
                     }}}
 
       context 'Without params' do
-        it 'Allows access cartoDB data' do
+        it 'Allows access cartoDB data with default limit 1' do
           post "/query/#{dataset_id}", params: params
 
           data = json['data'][0]
@@ -28,6 +28,7 @@ module V1
           expect(data['pcpuid']).not_to      be_nil
           expect(data['the_geom']).to        be_present
           expect(json['data_attributes']).to be_present
+          expect(json['data'].length).to     eq(1)
         end
       end
 
@@ -95,7 +96,7 @@ module V1
         end
 
         it 'Allows access cartoDB data details for all filters, order and without select' do
-          post "/query/#{dataset_id}?filter=(cartodb_id<<5)&filter_not=(cartodb_id==4 <and> pcpuid><'500001'..'9506590')&order[]=-cartodb_id", params: params
+          post "/query/#{dataset_id}?filter=(cartodb_id<<5)&filter_not=(cartodb_id==4 <and> pcpuid><'500001'..'9506590')&order[]=-cartodb_id&limit=2", params: params
 
           data = json['data']
 
@@ -108,7 +109,7 @@ module V1
         end
 
         it 'Allows access cartoDB data details for all filters without select and order' do
-          post "/query/#{dataset_id}?filter=(cartodb_id>=2)&filter_not=(cartodb_id==4 <and> pcpuid><'350659'..'9506590')", params: params
+          post "/query/#{dataset_id}?filter=(cartodb_id>=2)&filter_not=(cartodb_id==4 <and> pcpuid><'350659'..'9506590')&limit=3", params: params
 
           data = json['data']
 
@@ -139,10 +140,10 @@ module V1
         end
 
         it 'Allows access cartoDB data with limit rows as array filter' do
-          post "/query/#{dataset_id}?limit[]=1", params: params
+          post "/query/#{dataset_id}?limit[]=3", params: params
 
           expect(status).to eq(200)
-          expect(json['data'].length).to eq(1)
+          expect(json['data'].length).to eq(3)
         end
 
         it 'Allows access cartoDB data details for all filters without select and order' do
