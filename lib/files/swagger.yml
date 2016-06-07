@@ -47,7 +47,7 @@ paths:
           type: string
         - name: limit
           in: query
-          description: Limit data rows. example limit=2
+          description: Limit data rows. example limit=2 (default limit filter = 1, to show all available data use limit=all)
           type: number
         - name: dataset
           in: body
