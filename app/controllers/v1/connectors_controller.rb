@@ -31,6 +31,11 @@ module V1
       end
     end
 
+    def info
+      @docs = Oj.load(File.read("lib/files/service_#{ENV['RAILS_ENV']}.json"))
+      render json: @docs
+    end
+
     private
 
       def set_connector

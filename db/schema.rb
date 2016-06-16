@@ -15,14 +15,14 @@ ActiveRecord::Schema.define(version: 20160420145313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "citext"
   enable_extension "uuid-ossp"
+  enable_extension "citext"
 
   create_table "datasets", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.jsonb    "data_columns", default: {}
+    t.jsonb    "data_columns", default: "{}"
     t.integer  "data_horizon", default: 0
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.index ["data_columns"], name: "index_datasets_on_data_columns", using: :gin
   end
 
