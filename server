@@ -60,15 +60,8 @@ case "$1" in
           kill -9 $(lsof -i tcp:3005 -t) && bundle exec puma -C config/puma.rb
         fi
         ;;
-    register-service)
-        curl --request POST \
-             --url http://ec2-52-23-163-254.compute-1.amazonaws.com/gateway/service \
-             --header 'cache-control: no-cache' \
-             --header 'content-type: application/json' \
-             --data "$(cat lib/files/service.json)"
-        ;;
   *)
-        echo "Usage: server {start develop - production|stop|status|restart|register-service}" >&2
+        echo "Usage: server {start develop - production|stop|status|restart}" >&2
         exit 1
         ;;
 esac
