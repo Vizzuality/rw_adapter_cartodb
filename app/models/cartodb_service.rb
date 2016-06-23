@@ -21,12 +21,7 @@ class CartodbService
     url =  URI.encode(@connect_data_url[/[^\?]+/])
     url += query_to_run
 
-    @c = Curl::Easy.http_get(URI.escape(url)) do |curl|
-      curl.headers['Accept']       = 'application/json'
-      curl.headers['Content-Type'] = 'application/json'
-    end
-
-    Oj.load(@c.body_str.force_encoding(Encoding::UTF_8))[@connect_data_path] || Oj.load(@c.body_str.force_encoding(Encoding::UTF_8))
+    ConnectorService.connect_to_provider(url, @connect_data_path)
   end
 
   private
@@ -54,7 +49,7 @@ class CartodbService
       # ORDER
       filter += Filters::Order.apply_order(@order) if @order.present?
       # Limit
-      filter += Filters::Limit.apply_limit(@limit) if @limit.present?
+      filter += Filters::Limit.apply_limit(@limit) if @limit.present? && !@limit.include?('all')
       # TODO: Validate query structure
       filter
     end

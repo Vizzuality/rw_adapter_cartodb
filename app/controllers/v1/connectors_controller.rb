@@ -1,9 +1,9 @@
 module V1
   class ConnectorsController < ApplicationController
-    before_action :set_connector
-    before_action :set_query_filter
-    before_action :set_uri
-    before_action :set_dataset, only: :destroy
+    before_action :set_connector,    except: :info
+    before_action :set_query_filter, except: :info
+    before_action :set_uri,          except: :info
+    before_action :set_dataset,      only: :destroy
 
     def show
       render json: @connector, serializer: ConnectorSerializer, query_filter: @query_filter, root: false, uri: @uri
@@ -24,10 +24,20 @@ module V1
     def destroy
       @dataset.destroy
       begin
-        Dataset.notifier(params[:id], 'deleted') if ENV['API_DATASET_META_URL'].present?
+        Dataset.notifier(params[:id], 'deleted') if ServiceSetting.auth_token.present?
         render json: { message: 'Dataset deleted' }, status: 200
       rescue ActiveRecord::RecordNotDestroyed
         return render json: @dataset.erors, message: 'Dataset could not be deleted', status: 422
+      end
+    end
+
+    def info
+      @service = ServiceSetting.save_gateway_settings(params)
+      if @service
+        @docs = Oj.load(File.read("lib/files/service_#{ENV['RAILS_ENV']}.json"))
+        render json: @docs
+      else
+        render json: { success: false, message: 'Missing url and token params' }, status: 422
       end
     end
 
@@ -61,7 +71,7 @@ module V1
       end
 
       def notify(status=nil)
-        Dataset.notifier(connector_params['id'], status) if ENV['API_DATASET_META_URL'].present?
+        Dataset.notifier(connector_params['id'], status) if ServiceSetting.auth_token.present?
       end
 
       def meta_data_params

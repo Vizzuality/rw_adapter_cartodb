@@ -1,4 +1,4 @@
-# # PostgreSQL. Versions 9.4 and up are supported.
+# PostgreSQL. Versions 9.4 and up are supported.
 #
 # Install the pg driver:
 #   gem install pg
@@ -19,7 +19,6 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
   username: <%= ENV['POSTGRES_USER'] %>
   # please see the update below about using hostnames to
   # access linked services via docker-compose
@@ -56,6 +55,5 @@ test:
 
 production:
   <<: *default
-  database: rest_adapter_production
-  username: <%= ENV['RESOURCE_WATCH_DATABASE_USER'] %>
-  password: <%= ENV['RESOURCE_WATCH_DATABASE_PASSWORD'] %>
+  database: cartodb_adapter_production
+  password: <%= ENV['POSTGRES_PASS'] %>

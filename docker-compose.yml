@@ -1,26 +1,17 @@
-web:
-  build: .
-  command: run
+prod:
+  image: vizzuality/rw_adapter_cartodb:1.0.0${STAGING}
+  command: start
   ports:
-    - "5000:5000"
+    - '3005'
   links:
-    - postgres
-  volumes:
-    - .:/rw_adapter_cartodb
+    - redis
+  env_file: prod.env
 
-web:
-  build: .
-  command: run
-  ports:
-    - "5000:5000"
-  links:
-    - postgres
-  volumes:
-    - .:/rw_adapter_cartodb
-postgres:
-  image: postgres
-  container_name: rw_adapter_cartodb-postgres
-  ports:
-    - "5432:5432"
-  environment:
-    - POSTGRES_DB=resource_watch_development
+  log_driver: 'gelf'
+  restart: always
+  log_opt:
+    gelf-address: ${GELF_ADDRESS}
+
+redis:
+  image: redis
+  container_name: redis_rw_adapter_cartodb

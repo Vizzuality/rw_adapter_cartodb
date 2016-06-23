@@ -46,7 +46,6 @@ module V1
           data = json['data']
 
           expect(status).to           eq(200)
-          expect(data.size).to        eq(1)
           expect(data['error'][0]).to eq('column "isoss" does not exist')
         end
       end

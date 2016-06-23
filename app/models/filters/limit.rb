@@ -1,11 +1,11 @@
 module Filters
   class Limit
-    def self.apply_limit(order_params)
-      to_order = order_params.is_a?(Array) ? order_params.join(',').split(',') : order_params.split(',')
+    def self.apply_limit(limit_params)
+      to_limit = limit_params.is_a?(Array) ? limit_params.join(',').split(',') : limit_params.split(',')
       filter = ' Limit'
 
-      order_attr = "#{to_order[0]}"
-      filter += " #{order_attr}"
+      limit_attr = "#{to_limit[0]}"
+      filter += " #{limit_attr}"
       filter
     end
   end
