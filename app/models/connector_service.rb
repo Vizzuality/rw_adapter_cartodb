@@ -6,7 +6,7 @@ class ConnectorService
   class << self
     def connect_to_dataset_service(dataset_id, status)
       status = case status
-               when 'saved' then 1
+               when 'saved'   then 1
                when 'deleted' then 3
                else 2
                end
