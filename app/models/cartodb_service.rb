@@ -18,7 +18,11 @@ class CartodbService
                      "?q=#{index_query}"
                    end
 
-    url =  URI.encode(@connect_data_url[/[^\?]+/])
+    url = URI.encode(@connect_data_url[/[^\?]+/])
+    if url.include?('/tables/')
+      url = URI(url)
+      url = "#{url.scheme}://#{url.host}/api/v2/sql"
+    end
     url += query_to_run
 
     ConnectorService.connect_to_provider(url, @connect_data_path)
@@ -45,7 +49,7 @@ class CartodbService
       filter += ' AND' if @not_filter.present? && @filter.present?
       filter += Filters::FilterWhere.apply_where(nil, @not_filter) if @not_filter.present?
       # GROUP BY
-      filter += Filters::GroupBy.apply_group_by(@aggr_by) if @aggr_func.present? && @aggr_by.present?
+      filter += Filters::GroupBy.apply_group_by(@group) if @group.present?
       # ORDER
       filter += Filters::Order.apply_order(@order) if @order.present?
       # Limit

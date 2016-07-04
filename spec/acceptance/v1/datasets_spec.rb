@@ -5,17 +5,25 @@ module V1
     context 'For specific dataset' do
       fixtures :datasets
 
-      let!(:dataset_id) { Dataset.first.id }
+      let!(:dataset_id)  { Dataset.first.id }
+      let!(:dataset_id2) { Dataset.second.id }
       let!(:params) {{"dataset": {
                       "id": "#{dataset_id}",
                       "provider": "CartoDb",
                       "format": "JSON",
                       "name": "Carto test api",
-                      "data_path": "rows",
                       "attributes_path": "fields",
                       "connector_url": "https://rschumann.cartodb.com/api/v2/sql?q=select%20*%20from%20public.carts_test_endoint",
                       "table_name": "public.carts_test_endoint",
                     }}}
+
+      let!(:tables_params) {{"dataset": {
+                             "id": "#{dataset_id2}",
+                             "provider": "CartoDb",
+                             "format": "JSON",
+                             "name": "Carto test api",
+                             "connector_url": "https://insights.cartodb.com/tables/cait_2_0_country_ghg_emissions_filtered/public/map"
+                           }}}
 
       context 'Without params' do
         it 'Allows access cartoDB data with default limit 1' do
@@ -27,6 +35,17 @@ module V1
           expect(data['cartodb_id']).not_to  be_nil
           expect(data['pcpuid']).not_to      be_nil
           expect(data['the_geom']).to        be_present
+          expect(json['data_attributes']).to be_present
+          expect(json['data'].length).to     eq(1)
+        end
+
+        it 'Allows access cartoDB data with default limit 1 for tables url' do
+          post "/query/#{dataset_id}", params: tables_params
+
+          data = json['data'][0]
+
+          expect(status).to eq(200)
+          expect(data['cartodb_id']).to      be(1)
           expect(json['data_attributes']).to be_present
           expect(json['data'].length).to     eq(1)
         end

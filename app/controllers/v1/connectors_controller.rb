@@ -62,6 +62,7 @@ module V1
         # For group
         @query_filter['aggr_by']    = params[:aggr_by]   if params[:aggr_by].present?
         @query_filter['aggr_func']  = params[:aggr_func] if params[:aggr_func].present?
+        @query_filter['group_by']   = params[:group_by]  if params[:group_by].present?
       end
 
       def set_uri
@@ -79,7 +80,7 @@ module V1
       end
 
       def connector_params
-        params.require(:connector).permit(:id, :connector_url, :attributes_path)
+        params.require(:connector).permit(:id, :connector_url, :attributes_path, :table_name)
       end
   end
 end

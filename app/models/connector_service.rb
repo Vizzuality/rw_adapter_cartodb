@@ -21,8 +21,15 @@ class ConnectorService
       end
     end
 
-    def connect_to_provider(connector_url, data_path)
-      url = URI.decode(connector_url)
+    def connect_to_provider(connector_url, data_path, table_name=nil)
+      if connector_url.include?('/tables/')
+        select_limit = "select * from #{table_name} limit 1"
+
+        url = URI(connector_url)
+        url = "#{url.scheme}://#{url.host}/api/v2/sql?q=#{select_limit}"
+      else
+        url = URI.decode(connector_url)
+      end
 
       @c = Curl::Easy.http_get(URI.escape(url)) do |curl|
         curl.headers['Accept']       = 'application/json'
