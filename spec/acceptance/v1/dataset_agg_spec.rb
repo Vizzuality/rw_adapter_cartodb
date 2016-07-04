@@ -35,7 +35,7 @@ module V1
         end
 
         it 'Allows aggregate cartoDB data by two attributes with order DESC' do
-          post "/query/#{dataset_id}?select[]=iso,population,year&filter=(iso=='ESP','AUS')&aggr_by[]=population&aggr_func=sum&group_by=iso,year&order[]=iso,-year", params: params
+          post "/query/#{dataset_id}?select[]=iso,population,year&filter=(iso=='ESP','AUS')&aggr_by[]=population&aggr_func=sum&group_by[]=iso,year&order[]=iso,-year", params: params
 
           data = json['data']
 
