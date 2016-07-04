@@ -24,7 +24,7 @@ module V1
 
       context 'Aggregation with params' do
         it 'Allows aggregate cartoDB data by one attribute' do
-          post "/query/#{dataset_id}?select[]=iso,population&filter=(iso=='ESP','AUS')&aggr_by[]=iso&aggr_func=max&order[]=iso", params: params
+          post "/query/#{dataset_id}?select[]=iso,population&filter=(iso=='ESP','AUS')&aggr_by[]=population&aggr_func=max&group_by=iso&order[]=iso", params: params
 
           data = json['data']
 
@@ -35,7 +35,7 @@ module V1
         end
 
         it 'Allows aggregate cartoDB data by two attributes with order DESC' do
-          post "/query/#{dataset_id}?select[]=iso,population&filter=(iso=='ESP','AUS')&aggr_by[]=iso,year&aggr_func=sum&order[]=iso,-year", params: params
+          post "/query/#{dataset_id}?select[]=iso,population,year&filter=(iso=='ESP','AUS')&aggr_by[]=population&aggr_func=sum&group_by=iso,year&order[]=iso,-year", params: params
 
           data = json['data']
 
@@ -46,7 +46,7 @@ module V1
         end
 
         it 'Return error message for wrong params' do
-          post "/query/#{dataset_id}?select[]=isoss,population&filter=(iso=='ESP','AUS')&aggr_by[]=iso&aggr_func=max&order[]=iso", params: params
+          post "/query/#{dataset_id}?select[]=isoss,population&filter=(iso=='ESP','AUS')&aggr_by[]=population&aggr_func=max&group_by=iso&order[]=iso", params: params
 
           data = json['data']
 
