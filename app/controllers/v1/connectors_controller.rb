@@ -79,7 +79,7 @@ module V1
       end
 
       def connector_params
-        params.require(:connector).permit(:id, :connector_url, :attributes_path)
+        params.require(:connector).permit(:id, :connector_url, :attributes_path, :table_name)
       end
   end
 end

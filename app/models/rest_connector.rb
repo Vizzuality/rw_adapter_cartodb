@@ -13,7 +13,7 @@ class RestConnector
   end
 
   def recive_dataset_meta
-    @recive_attributes = ConnectorService.connect_to_provider(@connector_url, @attributes_path)
+    @recive_attributes = ConnectorService.connect_to_provider(@connector_url, @attributes_path, @table_name)
     @data_horizon      = @data_horizon.present? ? @data_horizon : 0
     { dataset: { id: @id, data_columns: @recive_attributes, data_horizon: @data_horizon } } if @recive_attributes.any? && @recive_attributes['error'].blank?
   end

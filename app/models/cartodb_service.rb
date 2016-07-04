@@ -18,7 +18,11 @@ class CartodbService
                      "?q=#{index_query}"
                    end
 
-    url =  URI.encode(@connect_data_url[/[^\?]+/])
+    url = URI.encode(@connect_data_url[/[^\?]+/])
+    if url.include?('/tables/')
+      url = URI(url)
+      url = "#{url.scheme}://#{url.host}/api/v2/sql"
+    end
     url += query_to_run
 
     ConnectorService.connect_to_provider(url, @connect_data_path)
