@@ -36,7 +36,7 @@ require "action_controller/railtie"
 # config.middleware.delete ::Rack::Sendfile
 
 # Require the gems listed in Gemfile, including any gems
-# you've limited to :test, :development, or :production.
+# you've limited to :test, :development, :staging, or :production.
 Bundler.require(*Rails.groups)
 GC::Profiler.enable
 
