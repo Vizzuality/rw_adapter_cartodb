@@ -32,11 +32,11 @@ module V1
           data = json['data'][0]
 
           expect(status).to eq(200)
-          expect(data['cartodb_id']).not_to  be_nil
-          expect(data['pcpuid']).not_to      be_nil
-          expect(data['the_geom']).to        be_present
-          expect(json['data_attributes']).to be_present
-          expect(json['data'].length).to     eq(1)
+          expect(data['cartodb_id']).not_to be_nil
+          expect(data['pcpuid']).not_to     be_nil
+          expect(data['the_geom']).to       be_present
+          expect(json['fields']).to         be_present
+          expect(json['data'].length).to    eq(1)
         end
 
         it 'Allows access cartoDB data with default limit 1 for tables url' do
@@ -45,9 +45,9 @@ module V1
           data = json['data'][0]
 
           expect(status).to eq(200)
-          expect(data['cartodb_id']).to      be(1)
-          expect(json['data_attributes']).to be_present
-          expect(json['data'].length).to     eq(1)
+          expect(data['cartodb_id']).to  be(1)
+          expect(json['fields']).to      be_present
+          expect(json['data'].length).to eq(1)
         end
       end
 
@@ -58,11 +58,11 @@ module V1
           data = json['data'][0]
 
           expect(status).to eq(200)
-          expect(data['cartodb_id']).not_to  be_nil
-          expect(data['pcpuid']).not_to      be_nil
-          expect(data['the_geom']).to        be_present
-          expect(json['data_attributes']).to be_present
-          expect(json['data'].length).to     eq(5)
+          expect(data['cartodb_id']).not_to be_nil
+          expect(data['pcpuid']).not_to     be_nil
+          expect(data['the_geom']).to       be_present
+          expect(json['fields']).to         be_present
+          expect(json['data'].length).to    eq(5)
         end
 
         it 'Allows access cartoDB data with order ASC' do
