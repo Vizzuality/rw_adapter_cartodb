@@ -48,7 +48,7 @@ class CartodbService
     end
 
     def convert_query
-      query_path = ''
+      query_path  = ''
       query_path += "where=#{@where}&"                                           if @where.present?
       query_path += "outFields=#{@outFields}&"                                   if @outFields.present?
       query_path += "tableName=#{@dataset_table_name}&"                          if @dataset_table_name.present?
