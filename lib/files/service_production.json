@@ -28,6 +28,15 @@
       },
       {
         "url": "/rest-datasets/cartodb/:id",
+        "method": "POST",
+        "endpoints": [{
+            "method": "POST",
+            "baseUrl": "http://localhost:3005",
+            "path": "/datasets/:id"
+        }]
+      },
+      {
+        "url": "/rest-datasets/cartodb/:id",
         "method": "DELETE",
         "endpoints": [{
             "method": "DELETE",
