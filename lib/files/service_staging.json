@@ -1,6 +1,7 @@
 {
     "id": "rw_adapter_cartodb_v1",
     "name": "RW Adapter CartoDB v1",
+    "tags": ["rw"],
     "urls": [
       {
         "url": "/query/:dataset",
