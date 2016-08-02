@@ -8,7 +8,7 @@ module V1
       let!(:dataset_id) { Dataset.first.id }
 
       let!(:params) {{"connector": {"id": "9b98340b-5f51-444a-bed7-2c5bf7a1894c",
-                      "connector_url": "https://rschumann.cartodb.com/api/v2/sql?q=select%20*%20from%20public.carts_test_endoint",
+                      "connector_url": "https://rschumann.cartodb.com/api/v2/sql?q=select%20*%20FROM%20public.carts_test_endoint",
                     }}}
 
       let!(:tables_params) {{"connector": {
@@ -17,7 +17,7 @@ module V1
                            }}}
 
       let!(:params_failed) {{"connector": {"id": "9b98340b-5f51-444a-bed7-2c5bf7a1894c",
-                             "connector_url": "https://rschumann.cartodb.com/api/v2/sql?q=select%20*%20from%20public.carts_test_endoin",
+                             "connector_url": "https://rschumann.cartodb.com/api/v2/sql?q=select%20*%20fRom%20public.carts_test_endoin",
                              "attributes_path": "fields"
                             }}}
 
