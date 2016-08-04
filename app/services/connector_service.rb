@@ -33,8 +33,12 @@ class ConnectorService
         url = URI.decode(connector_url)
       end
 
+      headers = {}
+      headers['Accept']       = 'application/json'
+      headers['Content-Type'] = 'application/json'
+
       hydra    = Typhoeus::Hydra.new max_concurrency: 100
-      @request = ::Typhoeus::Request.new(URI.escape(url), method: :get, followlocation: true)
+      @request = ::Typhoeus::Request.new(URI.escape(url), method: :get, headers: headers, followlocation: true)
 
       @request.on_complete do |response|
         if response.success?
