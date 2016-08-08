@@ -16,6 +16,7 @@ class QueryService
       headers['Content-Type']   = 'application/json'
       headers['authentication'] = ServiceSetting.auth_token if ServiceSetting.auth_token.present?
 
+      Typhoeus::Config.memoize = true
       hydra    = Typhoeus::Hydra.new max_concurrency: 100
       @request = ::Typhoeus::Request.new(URI.escape(url), method: :get, headers: headers, followlocation: true)
 

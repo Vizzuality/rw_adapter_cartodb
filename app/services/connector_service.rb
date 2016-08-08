@@ -37,6 +37,7 @@ class ConnectorService
       headers['Accept']       = 'application/json'
       headers['Content-Type'] = 'application/json'
 
+      Typhoeus::Config.memoize = true
       hydra    = Typhoeus::Hydra.new max_concurrency: 100
       @request = ::Typhoeus::Request.new(URI.escape(url), method: :get, headers: headers, followlocation: true)
 
