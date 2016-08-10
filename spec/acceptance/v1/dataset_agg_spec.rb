@@ -30,18 +30,17 @@ module V1
         it 'Allows aggregate cartoDB data using fs by one attribute' do
           post "/query/#{dataset_id}?outFields=iso&where=iso in ('ESP','AUS')&groupByFieldsForStatistics=iso&outStatistics=#{group_attr_1}&orderByFields=iso ASC", params: params
 
-          data = json['data']
+          data = json['attributes']['rows']
 
           expect(status).to eq(200)
-          expect(data.size).to               eq(2)
-          expect(data[0]['iso']).to          eq('AUS')
-          expect(json['fields']).to be_present
+          expect(data.size).to      eq(2)
+          expect(data[0]['iso']).to eq('AUS')
         end
 
         it 'Allows aggregate cartoDB data using fs by two attributes with order DESC' do
           post "/query/#{dataset_id}?outFields=iso,year&where=iso in ('ESP','AUS')&groupByFieldsForStatistics=iso,year&outStatistics=#{group_attr_2}&orderByFields=iso ASC, year DESC", params: params
 
-          data = json['data']
+          data = json['attributes']['rows']
 
           expect(status).to eq(200)
           expect(data.size).to             eq(7)
@@ -52,7 +51,7 @@ module V1
         it 'Allows aggregate cartoDB data using fs by two attributes with order DESC' do
           post "/query/#{dataset_id}?sql=select iso,year,sum(population) as population from public.test_dataset_sebastian where iso in ('ESP','AUS') group by iso,year order by iso ASC,year DESC", params: params
 
-          data = json['data']
+          data = json['attributes']['rows']
 
           expect(status).to eq(200)
           expect(data.size).to             eq(7)
@@ -63,7 +62,7 @@ module V1
         it 'Return error message for wrong params' do
           post "/query/#{dataset_id}?sql=select isoss,sum(population) as population from public.test_dataset_sebastian where iso in ('ESP','AUS') group by iso order by iso DESC", params: params
 
-          data = json['data']
+          data = json['attributes']['rows']
 
           expect(status).to eq(200)
           expect(data['error'][0]).to eq('column "isoss" does not exist')

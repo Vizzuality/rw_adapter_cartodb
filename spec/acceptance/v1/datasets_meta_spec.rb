@@ -25,7 +25,7 @@ module V1
         post "/datasets", params: params
 
         expect(status).to eq(201)
-        expect(json['success']).to                                                   eq(true)
+        expect(json_main['success']).to                                                   eq(true)
         expect(Dataset.find('9b98340b-5f51-444a-bed7-2c5bf7a1894c').data_columns).to be_present
       end
 
@@ -33,7 +33,7 @@ module V1
         post "/datasets", params: tables_params
 
         expect(status).to eq(201)
-        expect(json['success']).to                                                   eq(true)
+        expect(json_main['success']).to                                                   eq(true)
         expect(Dataset.find('9b98340b-5f51-444a-bed7-2c5bf7a1894d').data_columns).to be_present
       end
 
@@ -45,7 +45,7 @@ module V1
                                                 }}
 
         expect(status).to eq(200)
-        expect(json['success']).to                       eq(true)
+        expect(json_main['success']).to                       eq(true)
         expect(Dataset.find(dataset_id).data_columns).to be_present
         expect(Dataset.find(dataset_id).data_horizon).to eq(3)
       end
@@ -54,7 +54,7 @@ module V1
         post "/datasets", params: params_failed
 
         expect(status).to eq(422)
-        expect(json['success']).to                                           eq(false)
+        expect(json_main['success']).to                                           eq(false)
         expect(Dataset.where(id: '9b98340b-5f51-444a-bed7-2c5bf7a1894c')).to be_empty
       end
 
@@ -62,7 +62,7 @@ module V1
         delete "/datasets/#{dataset_id}"
 
         expect(status).to eq(200)
-        expect(json['message']).to               eq('Dataset deleted')
+        expect(json_main['message']).to               eq('Dataset deleted')
         expect(Dataset.where(id: dataset_id)).to be_empty
       end
     end
