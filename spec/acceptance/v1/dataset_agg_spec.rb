@@ -33,9 +33,8 @@ module V1
           data = json['data']
 
           expect(status).to eq(200)
-          expect(data.size).to               eq(2)
-          expect(data[0]['iso']).to          eq('AUS')
-          expect(json['fields']).to be_present
+          expect(data.size).to      eq(2)
+          expect(data[0]['iso']).to eq('AUS')
         end
 
         it 'Allows aggregate cartoDB data using fs by two attributes with order DESC' do

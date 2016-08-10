@@ -1,5 +1,5 @@
 class ConnectorSerializer < ActiveModel::Serializer
-  attributes :clone_url, :fields, :data
+  attributes :clone_url, :data
 
   def clone_url
     data = {}
