@@ -143,12 +143,12 @@ module V1
       end
 
       context 'For fields info' do
-        it 'Allows access Json data with default limit 1' do
+        it 'Allows access fields endpoint' do
           post "/fields/#{dataset_id}", params: params
 
           expect(status).to eq(200)
           expect(json['attributes']['fields']).to        be_present
-          expect(json['attributes']['tableName']).not_to eq('data')
+          expect(json['attributes']['tableName']).not_to eq('cait_2_0_country_ghg_emissions_filtered')
         end
       end
     end
