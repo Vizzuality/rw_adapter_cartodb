@@ -55,10 +55,10 @@ test:
 
 staging:
   <<: *default
-  database: cartodb_adapter_production
+  database: cartodb_adapter
   password: <%= ENV['POSTGRES_PASS'] %>
 
 production:
   <<: *default
-  database: cartodb_adapter
+  database: cartodb_adapter_production
   password: <%= ENV['POSTGRES_PASS'] %>
