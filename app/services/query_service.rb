@@ -2,7 +2,7 @@ require 'typhoeus'
 require 'uri'
 require 'oj'
 
-class QueryService
+module QueryService
   class << self
     def connect_to_query_service(service_method, query_params=nil, sql_params=nil)
       url = if service_method.include?('fs2SQL')
