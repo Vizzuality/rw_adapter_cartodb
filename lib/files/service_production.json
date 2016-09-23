@@ -36,6 +36,7 @@
       {
         "url": "/rest-datasets/cartodb",
         "method": "POST",
+        "authenticated": true,
         "endpoints": [{
             "method": "POST",
             "baseUrl": "http://localhost:3005",
@@ -45,6 +46,7 @@
       {
         "url": "/rest-datasets/cartodb/:id",
         "method": "POST",
+        "authenticated": true,
         "endpoints": [{
             "method": "POST",
             "baseUrl": "http://localhost:3005",
@@ -54,6 +56,7 @@
       {
         "url": "/rest-datasets/cartodb/:id",
         "method": "DELETE",
+        "authenticated": true,
         "endpoints": [{
             "method": "DELETE",
             "baseUrl": "http://localhost:3005",
