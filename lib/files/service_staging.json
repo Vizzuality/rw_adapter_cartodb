@@ -9,7 +9,11 @@
         "paramProvider": "dataset",
         "dataProvider": "dataset",
         "filters":{
-            "provider": "cartodb"
+          "data": {
+              "attributes": {
+                "provider": "cartodb"
+              }
+            }
         },
         "endpoints": [{
             "method": "POST",
@@ -24,7 +28,11 @@
         "paramProvider": "dataset",
         "dataProvider": "dataset",
         "filters":{
-            "provider": "cartodb"
+          "data": {
+              "attributes": {
+                "provider": "cartodb"
+              }
+            }
         },
         "endpoints": [{
             "method": "POST",
