@@ -9,22 +9,22 @@ module V1
       let!(:dataset_id)   { Dataset.first.id }
       let!(:dataset_id_2) { Dataset.second.id }
 
-      let!(:params) {{"dataset": {
-                      "id": "#{dataset_id}",
-                      "provider": "CartoDb",
-                      "format": "JSON",
-                      "name": "Carto test api",
-                      "attributes_path": "fields",
-                      "connector_url": "https://rschumann.cartodb.com/api/v2/sql?q=select%20*%20from%20public.carts_test_endoint",
-                      "table_name": "public.carts_test_endoint",
-                    }}}
+      let!(:params) {{"connector": {"dataset": {"data": {
+                                  "id": "#{dataset_id}",
+                                  "attributes": {"provider": "CartoDb",
+                                                              "format": "JSON",
+                                                              "name": "Carto test api",
+                                                              "attributes_path": "fields",
+                                                              "connectorUrl": "https://rschumann.cartodb.com/api/v2/sql?q=select%20*%20from%20public.carts_test_endoint",
+                                                              "tableName": "public.carts_test_endoint",
+                                                            }}}}}}
 
       let!(:tables_params) {{"connector": {"dataset": {"data": {
                                          "id": "#{dataset_id_2}","attributes": {
                                                                                   "provider": "CartoDb",
                                                                                   "format": "JSON",
                                                                                   "name": "Carto test api",
-                                                                                  "connector_url": "https://insights.cartodb.com/tables/cait_2_0_country_ghg_emissions_filtered/public/map"}
+                                                                                  "connectorUrl": "https://insights.cartodb.com/tables/cait_2_0_country_ghg_emissions_filtered/public/map"}
                                        }}}}}
 
       context 'Without params' do
