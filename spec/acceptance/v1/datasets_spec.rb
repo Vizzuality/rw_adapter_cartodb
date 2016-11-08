@@ -20,11 +20,11 @@ module V1
                     }}}
 
       let!(:tables_params) {{"connector": {"dataset": {"data": {
-                                         "id": "#{dataset_id_2}",
-                                         "provider": "CartoDb",
-                                         "format": "JSON",
-                                         "name": "Carto test api",
-                                         "connector_url": "https://insights.cartodb.com/tables/cait_2_0_country_ghg_emissions_filtered/public/map"
+                                         "id": "#{dataset_id_2}","attributes": {
+                                                                                  "provider": "CartoDb",
+                                                                                  "format": "JSON",
+                                                                                  "name": "Carto test api",
+                                                                                  "connector_url": "https://insights.cartodb.com/tables/cait_2_0_country_ghg_emissions_filtered/public/map"}
                                        }}}}}
 
       context 'Without params' do
