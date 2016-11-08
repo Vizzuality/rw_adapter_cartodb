@@ -3,10 +3,11 @@ require 'uri'
 
 class DatasetParams < Hash
   def initialize(params)
-    params[:connector_url] ||= params[:connectorUrl]
-    params[:table_name]    ||= params[:tableName]
-    params[:data_path]     ||= params[:dataPath]
-    params[:data_horizon]  ||= params[:dataHorizon]
+    params[:connector_url]   ||= params[:connectorUrl]
+    params[:table_name]      ||= params[:tableName]
+    params[:data_path]       ||= params[:dataPath]
+    params[:data_horizon]    ||= params[:dataHorizon]
+    params[:attributes_path] ||= params[:attributesPath]
     sanitized_params = {
       id: params[:id] || nil,
       name: params[:name] || nil,
