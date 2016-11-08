@@ -19,13 +19,13 @@ module V1
                       "table_name": "public.carts_test_endoint",
                     }}}
 
-      let!(:tables_params) {{"dataset": {
-                             "id": "#{dataset_id_2}",
-                             "provider": "CartoDb",
-                             "format": "JSON",
-                             "name": "Carto test api",
-                             "connector_url": "https://insights.cartodb.com/tables/cait_2_0_country_ghg_emissions_filtered/public/map"
-                           }}}
+      let!(:tables_params) {{"connector": {"dataset": {"data": {
+                                         "id": "#{dataset_id_2}",
+                                         "provider": "CartoDb",
+                                         "format": "JSON",
+                                         "name": "Carto test api",
+                                         "connector_url": "https://insights.cartodb.com/tables/cait_2_0_country_ghg_emissions_filtered/public/map"
+                                       }}}}}
 
       context 'Without params' do
         it 'Allows access cartoDB data with default limit 1' do

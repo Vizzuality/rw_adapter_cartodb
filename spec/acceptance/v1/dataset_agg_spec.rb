@@ -15,13 +15,13 @@ module V1
                       "connector_url": "https://simbiotica.cartodb.com/api/v2/sql?q=select * from public.test_dataset_sebastian where cartodb_id in (2, 3)"
                     }}}
 
-      let!(:tables_params) {{"dataset": {
-                             "id": "#{dataset_id}",
-                             "provider": "CartoDb",
-                             "format": "JSON",
-                             "name": "Carto test api table endpoint",
-                             "connector_url": "https://insights.cartodb.com/tables/cait_2_0_country_ghg_emissions_filtered/public/map"
-                           }}}
+      let!(:tables_params) {{"connector": {"dataset": {"data":{
+                                         "id": "#{dataset_id}",
+                                         "provider": "CartoDb",
+                                         "format": "JSON",
+                                         "name": "Carto test api table endpoint",
+                                         "connector_url": "https://insights.cartodb.com/tables/cait_2_0_country_ghg_emissions_filtered/public/map"
+                                       }}}}}
 
       let(:group_attr_1) { URI.encode(Oj.dump([{"statisticType": "max", "onStatisticField": "population", "outStatisticFieldName": "population" }])) }
       let(:group_attr_2) { URI.encode(Oj.dump([{"statisticType": "sum", "onStatisticField": "population", "outStatisticFieldName": "population" }])) }
