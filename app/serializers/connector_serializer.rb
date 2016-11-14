@@ -25,7 +25,8 @@ class ConnectorSerializer < ApplicationSerializer
   def body_params
     {
       "dataset" => {
-        "dataset_url" => "#{URI.parse(uri)}"
+        "dataset_url" => "#{URI.parse(uri)}",
+        "apps" => ["your","apps"]
       }
     }
   end
