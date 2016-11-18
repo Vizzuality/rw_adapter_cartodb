@@ -3,6 +3,7 @@ require 'curb'
 require 'typhoeus'
 require 'uri'
 require 'oj'
+require 'yajl'
 
 module ConnectorService
   class << self
@@ -44,7 +45,8 @@ module ConnectorService
 
       @request.on_complete do |response|
         if response.success?
-          @data = Oj.load(response.body.force_encoding(Encoding::UTF_8))[data_path] || Oj.load(response.body.force_encoding(Encoding::UTF_8))
+          parser = Yajl::Parser.new
+          @data = parser.parse(response.body.force_encoding(Encoding::UTF_8))[data_path] || parser.parse(response.body.force_encoding(Encoding::UTF_8))
         elsif response.timed_out?
           @data = 'got a time out'
         elsif response.code.zero?
