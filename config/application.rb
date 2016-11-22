@@ -54,6 +54,11 @@ module RwAdapterCartodb
     config.api_only = true
     config.autoload_paths += Dir[Rails.root.join('app', 'models', '{**}')]
 
+    config.host = ENV.fetch('REDIS_PORT_6379_TCP_ADDR') { 'localhost' }
+    config.port = ENV.fetch('REDIS_PORT_6379_TCP_PORT') { 6379        }
+
+    config.redis_url = "redis://#{config.host}:#{config.port}/0/cache"
+
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
       g.test_framework :rspec,

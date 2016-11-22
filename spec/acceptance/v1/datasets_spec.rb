@@ -46,7 +46,6 @@ module V1
           data = json['data'][0]
 
           expect(status).to eq(200)
-          expect(data['cartodb_id']).to  be(1)
           expect(json['data'].length).to eq(1)
         end
       end
