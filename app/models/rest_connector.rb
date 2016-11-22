@@ -15,7 +15,7 @@ class RestConnector
   end
 
   def data(options = {})
-    cache_options  = 'results'
+    cache_options  = "results_#{self.id}"
     cache_options += "_#{options}" if options.present?
 
     if results = Rails.cache.read(cache_key(cache_options))
