@@ -15,8 +15,22 @@ class RestConnector
   end
 
   def data(options = {})
-    get_data = CartodbService.new(@connector_url, @data_path, @table_name, options)
-    get_data.connect_data
+    cache_options  = 'results'
+    cache_options += "_#{options}" if options.present?
+
+    if results = Rails.cache.read(cache_key(cache_options))
+      results
+    else
+      get_data = CartodbService.new(@connector_url, @data_path, @table_name, options)
+      results = get_data.connect_data
+
+      Rails.cache.write(cache_key(cache_options), results.to_a)
+    end
+    results
+  end
+
+  def cache_key(cache_options)
+    "query_#{ cache_options }"
   end
 
   def recive_dataset_meta
