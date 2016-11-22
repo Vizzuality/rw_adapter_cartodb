@@ -24,7 +24,7 @@ class RestConnector
       get_data = CartodbService.new(@connector_url, @data_path, @table_name, options)
       results = get_data.connect_data
 
-      Rails.cache.write(cache_key(cache_options), results.to_a)
+      Rails.cache.write(cache_key(cache_options), results.to_a) if results.present?
     end
     results
   end
