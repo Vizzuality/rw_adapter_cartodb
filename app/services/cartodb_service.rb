@@ -21,8 +21,15 @@ class CartodbService
 
     url = URI.encode(@connect_data_url[/[^\?]+/])
     if url.include?('/tables/')
-      url = URI(url)
-      url = "#{url.scheme}://#{url.host}/api/v2/sql"
+      if url.include?('/u/')
+        url = URI(url)
+        url_sub  = url.path.split(/u|tables/)[1].gsub('/','')
+        url_host = 'carto.com'
+        url = "#{url.scheme}://#{url_sub}.#{url_host}/api/v2/sql"
+      else
+        url = URI(url)
+        url = "#{url.scheme}://#{url.host}/api/v2/sql"
+      end
     end
     url += query_to_run
 

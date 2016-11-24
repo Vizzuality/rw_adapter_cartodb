@@ -27,6 +27,14 @@ module V1
                                                                                   "connectorUrl": "https://insights.cartodb.com/tables/cait_2_0_country_ghg_emissions_filtered/public/map"}
                                        }}}}}
 
+      let!(:tables_params_u) {{"connector": {"dataset": {"data": {
+                                         "id": "#{dataset_id_2}","attributes": {
+                                                                                  "provider": "CartoDb",
+                                                                                  "format": "JSON",
+                                                                                  "name": "Carto test api",
+                                                                                  "connectorUrl": "https://prep.carto.com/u/prep-admin/tables/temp_graph/table"}
+                                       }}}}}
+
       context 'Without params' do
         it 'Allows access cartoDB data with default limit 1' do
           post "/query/#{dataset_id}", params: params
@@ -42,6 +50,15 @@ module V1
 
         it 'Allows access cartoDB data with default limit 1 for tables url' do
           post "/query/#{dataset_id}", params: tables_params
+
+          data = json['data'][0]
+
+          expect(status).to eq(200)
+          expect(json['data'].length).to eq(1)
+        end
+
+        it 'Allows access cartoDB data with default limit 1 for tables user url' do
+          post "/query/#{dataset_id}", params: tables_params_u
 
           data = json['data'][0]
 

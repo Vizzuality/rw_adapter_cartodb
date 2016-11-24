@@ -15,7 +15,7 @@ module V1
         @dataset = Dataset.new(meta_data_params)
         @dataset.save
         notify(@dataset.id, 'saved')
-        render json: { success: true, message: 'Dataset created' }, status: 201
+        render json: { success: true, message: "Dataset with id: #{@dataset.id} created" }, status: 201
       rescue
         notify(connector_params[:id])
         render json: { success: false, message: 'Error creating dataset' }, status: 422

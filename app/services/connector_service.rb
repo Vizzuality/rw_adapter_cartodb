@@ -28,9 +28,15 @@ module ConnectorService
     def connect_to_provider(connector_url, data_path, table_name=nil)
       if connector_url.include?('/tables/')
         select_limit = "select * from #{table_name} limit 1"
-
-        url = URI(connector_url)
-        url = "#{url.scheme}://#{url.host}/api/v2/sql?q=#{select_limit}"
+        if connector_url.include?('/u/')
+          url = URI(connector_url)
+          url_sub  = url.path.split(/u|tables/)[1].gsub('/','')
+          url_host = 'carto.com'
+          url = "#{url.scheme}://#{url_sub}.#{url_host}/api/v2/sql?q=#{select_limit}"
+        else
+          url = URI(connector_url)
+          url = "#{url.scheme}://#{url.host}/api/v2/sql?q=#{select_limit}"
+        end
       else
         url = URI.decode(connector_url)
       end
