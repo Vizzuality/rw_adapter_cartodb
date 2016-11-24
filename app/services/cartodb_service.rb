@@ -41,7 +41,7 @@ class CartodbService
     end
 
     def to_method
-      @sql.present? ? 'checkSQL' : 'fs2SQL'
+      @sql.present? ? 'sql2SQL' : 'fs2SQL'
     end
 
     def sql_params

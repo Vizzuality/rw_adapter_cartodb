@@ -9,7 +9,7 @@ module QueryService
       url = if service_method.include?('fs2SQL')
               URI.decode("#{Service::SERVICE_URL}/convert/fs2SQL?#{query_params}")
             else
-              URI.decode("#{Service::SERVICE_URL}/convert/checkSQL?sql=#{sql_params}")
+              URI.decode("#{Service::SERVICE_URL}/convert/sql2SQL?sql=#{sql_params}")
             end
 
       headers = {}

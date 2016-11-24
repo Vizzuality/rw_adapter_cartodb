@@ -16,7 +16,7 @@ module V1
                                                               "name": "Carto test api",
                                                               "attributes_path": "fields",
                                                               "connectorUrl": "https://rschumann.cartodb.com/api/v2/sql?q=select%20*%20from%20public.carts_test_endoint",
-                                                              "tableName": "public.carts_test_endoint",
+                                                              "tableName": "public.carts_test_endoint"
                                                             }}}}}}
 
       let!(:tables_params) {{"connector": {"dataset": {"data": {
