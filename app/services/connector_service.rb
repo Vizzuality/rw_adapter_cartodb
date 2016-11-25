@@ -25,7 +25,7 @@ module ConnectorService
       @c.perform
     end
 
-    def connect_to_provider(connector_url, data_path, table_name=nil)
+    def connect_to_provider(connector_url, data_path=nil, table_name=nil, attr_path=nil)
       if connector_url.include?('/tables/')
         select_limit = "select * from #{table_name} limit 1"
         if connector_url.include?('/u/')
@@ -51,8 +51,20 @@ module ConnectorService
 
       @request.on_complete do |response|
         if response.success?
-          parser = Yajl::Parser.new
-          @data = parser.parse(response.body.force_encoding(Encoding::UTF_8))[data_path] || parser.parse(response.body.force_encoding(Encoding::UTF_8))
+          parser = YAJI::Parser.new(response.body.force_encoding(Encoding::UTF_8))
+          if data_path.present?
+            @data  = []
+            parser.each("/#{data_path}/") do |obj|
+              obj.is_a?(String) ? @data = obj : @data << obj
+            end
+          elsif attr_path.present?
+            parser = Yajl::Parser.new
+            @data = parser.parse(response.body.force_encoding(Encoding::UTF_8))[attr_path] || parser.parse(response.body.force_encoding(Encoding::UTF_8))
+          else
+            parser = Yajl::Parser.new
+            @data  = parser.parse(response.body.force_encoding(Encoding::UTF_8))
+          end
+          @data
         elsif response.timed_out?
           @data = 'got a time out'
         elsif response.code.zero?

@@ -227,6 +227,7 @@ GEM
     websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
+    yaji (0.3.5)
     yajl-ruby (1.3.0)
 
 PLATFORMS
@@ -265,6 +266,7 @@ DEPENDENCIES
   timecop
   typhoeus
   tzinfo-data
+  yaji
   yajl-ruby
 
 RUBY VERSION

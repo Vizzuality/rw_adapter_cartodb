@@ -15,17 +15,17 @@ class RestConnector
   end
 
   def data(options = {})
-    cache_options  = "results_#{self.id}"
-    cache_options += "_#{options}" if options.present?
+    # cache_options  = "results_#{self.id}"
+    # cache_options += "_#{options}" if options.present?
 
-    if results = Rails.cache.read(cache_key(cache_options))
-      results
-    else
-      get_data = CartodbService.new(@connector_url, @data_path, @table_name, options)
-      results = get_data.connect_data
+    # if results = Rails.cache.read(cache_key(cache_options))
+    #   results
+    # else
+    get_data = CartodbService.new(@connector_url, @data_path, @table_name, options)
+    results = get_data.connect_data
 
-      Rails.cache.write(cache_key(cache_options), results.to_a) if results.present?
-    end
+    # Rails.cache.write(cache_key(cache_options), results.to_a) if results.present?
+    # end
     results
   end
 
@@ -34,9 +34,24 @@ class RestConnector
   end
 
   def recive_dataset_meta
-    @recive_attributes = ConnectorService.connect_to_provider(@connector_url, @attributes_path, @table_name)
+    @recive_attributes = ConnectorService.connect_to_provider(@connector_url, nil, @table_name, @attributes_path)
     @data_horizon      = @data_horizon.present? ? @data_horizon : 0
-    { dataset: { id: @id, data_columns: @recive_attributes, data_horizon: @data_horizon } } if @recive_attributes.any? && @recive_attributes['error'].blank?
+    { dataset: { id: @id, data_columns: convert(@recive_attributes), data_horizon: @data_horizon } } if @recive_attributes.any? && @recive_attributes['error'].blank?
+  end
+
+  def convert(recived_attributes)
+    new_attributes = {}
+    case recived_attributes
+    when Array
+      recived_attributes.each do |v|
+        new_attributes[v['name']] = { type: v['type'] }
+      end
+    when Hash
+      new_attributes = recived_attributes
+    else
+      new_attributes = nil
+    end
+    new_attributes
   end
 
   def data_columns
