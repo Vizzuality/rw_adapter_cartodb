@@ -71,6 +71,8 @@ module V1
         @query_filter['statisticType']              = params[:statisticType]              if params[:statisticType].present?
         # For convert endpoint sql2SQL
         @query_filter['sql']                        = params[:sql]                        if params[:sql].present?
+        # Geostore
+        @query_filter['geostore']                   = params[:geostore]                   if params[:geostore].present?
       end
 
       def set_uri

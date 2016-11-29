@@ -66,8 +66,9 @@ class CartodbService
       query_path += "outStatistics=#{@outStatistics}&"                           if @outStatistics.present?
       query_path += "statisticType=#{@statisticType}&"                           if @statisticType.present?
       sql_path    = "#{sql_params}"                                              if sql_params.present?
+      geostore    = @geostore                                                    if @geostore.present?
 
-      filter  = QueryService.connect_to_query_service(to_method, query_path, sql_path)
+      filter  = QueryService.connect_to_query_service(to_method, query_path, sql_path, geostore)
       filter += Filters::Limit.apply_limit(@limit) if @limit.present? && !@limit.include?('all')
       filter
     end

@@ -28,7 +28,7 @@ module V1
 
       context 'Aggregation with fs params' do
         it 'Allows aggregate cartoDB data using fs by one attribute' do
-          post "/query/#{dataset_id}?outFields=iso&where=iso in ('ESP','AUS')&groupByFieldsForStatistics=iso&outStatistics=#{group_attr_1}&orderByFields=iso ASC", params: params
+          post "/query/#{dataset_id}?outFields=iso&where=iso in ('ESP','AUS')&groupByFieldsForStatistics=iso&outStatistics=#{group_attr_1}&tableName=cait_2_0_country_ghg_emissions_filtered&orderByFields=iso ASC", params: params
 
           data = json['data']
 
@@ -38,7 +38,7 @@ module V1
         end
 
         it 'Allows aggregate cartoDB data using fs by two attributes with order DESC' do
-          post "/query/#{dataset_id}?outFields=iso,year&where=iso in ('ESP','AUS')&groupByFieldsForStatistics=iso,year&outStatistics=#{group_attr_2}&orderByFields=iso ASC, year DESC", params: params
+          post "/query/#{dataset_id}?outFields=iso,year&where=iso in ('ESP','AUS')&groupByFieldsForStatistics=iso,year&outStatistics=#{group_attr_2}&tableName=cait_2_0_country_ghg_emissions_filtered&orderByFields=iso ASC, year DESC", params: params
 
           data = json['data']
 

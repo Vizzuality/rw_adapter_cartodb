@@ -35,6 +35,15 @@ module V1
                                                                                   "connectorUrl": "https://prep.carto.com/u/prep-admin/tables/temp_graph/table"}
                                        }}}}}
 
+      let!(:params_geostore) {{"connector": {"dataset": {"data": {
+                                  "id": "#{dataset_id}",
+                                  "attributes": {"provider": "CartoDb",
+                                                              "format": "JSON",
+                                                              "name": "Carto test api",
+                                                              "attributes_path": "fields",
+                                                              "connectorUrl": "https://wri-01.carto.com/tables/wdpa_protected_areas/table"
+                                                            }}}}}}
+
       context 'Without params' do
         it 'Allows access cartoDB data with default limit 1' do
           post "/query/#{dataset_id}", params: params
@@ -165,6 +174,17 @@ module V1
           expect(status).to eq(200)
           expect(json['fields']).to        be_present
           expect(json['tableName']).not_to eq('cait_2_0_country_ghg_emissions_filtered')
+        end
+      end
+
+      context 'For geostore' do
+        it 'Allows access cartoDB data with geostore option' do
+          post "/query/#{dataset_id}?sql=select * from wdpa_protected_areas limit 1&geostore=aa2ee8febfe23cf94539f0b2b5309b0c", params: params_geostore
+
+          data = json['data'][0]
+
+          expect(status).to eq(200)
+          expect(data['the_geom']).to be_present
         end
       end
     end

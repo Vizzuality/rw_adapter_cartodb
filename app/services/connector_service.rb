@@ -45,9 +45,12 @@ module ConnectorService
       headers['Accept']       = 'application/json'
       headers['Content-Type'] = 'application/json'
 
+      body_params = url.split('?q=')[1]
+      query_url   = url.split('?q=')[0]
+
       Typhoeus::Config.memoize = true
       hydra    = Typhoeus::Hydra.new max_concurrency: 100
-      @request = Typhoeus::Request.new(URI.escape(url), method: :get, headers: headers, followlocation: true)
+      @request = Typhoeus::Request.new(URI.escape(query_url), method: :post, headers: headers, body: { q: body_params }.to_json)
 
       @request.on_complete do |response|
         if response.success?

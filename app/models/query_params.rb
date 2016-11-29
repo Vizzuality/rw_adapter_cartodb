@@ -11,6 +11,7 @@ class QueryParams < Hash
       groupByFieldsForStatistics: params['groupByFieldsForStatistics'] || nil,
       outStatistics:              params['outStatistics']              || nil,
       statisticType:              params['statisticType']              || nil,
+      geostore:                   params['geostore']                   || nil,
       limit:                      params['limit']                      ||= standard_limit(params)
     }
 
