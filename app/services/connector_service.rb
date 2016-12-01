@@ -4,6 +4,7 @@ require 'typhoeus'
 require 'uri'
 require 'oj'
 require 'yajl'
+require 'set'
 
 module ConnectorService
   class << self
@@ -54,15 +55,12 @@ module ConnectorService
 
       @request.on_complete do |response|
         if response.success?
-          parser = YAJI::Parser.new(response.body.force_encoding(Encoding::UTF_8))
           if data_path.present?
-            @data  = []
-            parser.each("/#{data_path}/") do |obj|
-              obj.is_a?(String) ? @data = obj : @data << obj
-            end
+            set   = response_processor(data_path, response)
+            @data = set
           elsif attr_path.present?
             parser = Yajl::Parser.new
-            @data = parser.parse(response.body.force_encoding(Encoding::UTF_8))[attr_path] || parser.parse(response.body.force_encoding(Encoding::UTF_8))
+            @data  = parser.parse(response.body.force_encoding(Encoding::UTF_8))[attr_path] || parser.parse(response.body.force_encoding(Encoding::UTF_8))
           else
             parser = Yajl::Parser.new
             @data  = parser.parse(response.body.force_encoding(Encoding::UTF_8))
@@ -79,6 +77,24 @@ module ConnectorService
       hydra.queue @request
       hydra.run
       @data
+    end
+
+    def response_processor(data_path, response)
+      batch = []
+      batch_size = 1000
+      parser = YAJI::Parser.new(response.body.force_encoding(Encoding::UTF_8))
+      set    = Set.new []
+      parser.each("/#{data_path}/") do |obj|
+        batch << obj
+        if batch.size >= batch_size
+          set = set | batch.to_set
+          batch = []
+        end
+      end
+      if batch.size <= batch_size
+        set = set | batch.to_set
+      end
+      set
     end
   end
 end
