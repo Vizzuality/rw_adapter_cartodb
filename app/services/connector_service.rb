@@ -65,7 +65,6 @@ module ConnectorService
             parser = Yajl::Parser.new
             @data  = parser.parse(response.body.force_encoding(Encoding::UTF_8))
           end
-          @data
         elsif response.timed_out?
           @data = 'got a time out'
         elsif response.code.zero?
@@ -80,21 +79,22 @@ module ConnectorService
     end
 
     def response_processor(data_path, response)
-      batch = []
-      batch_size = 1000
-      parser = YAJI::Parser.new(response.body.force_encoding(Encoding::UTF_8))
-      set    = Set.new []
+      batch      = []
+      batch_size = 10000
+      parser     = YAJI::Parser.new(response.body.force_encoding(Encoding::UTF_8))
+      set        = Set.new []
+
       parser.each("/#{data_path}/") do |obj|
         batch << obj
         if batch.size >= batch_size
-          set = set | batch.to_set
+          set   = set | batch.to_set
           batch = []
         end
       end
       if batch.size <= batch_size
         set = set | batch.to_set
       end
-      set
+      set.freeze
     end
   end
 end

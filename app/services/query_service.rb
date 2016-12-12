@@ -7,9 +7,9 @@ module QueryService
   class << self
     def connect_to_query_service(service_method, query_params=nil, sql_params=nil, geostore=nil)
       url = if service_method.include?('fs2SQL')
-              URI.decode("http://staging-api.globalforestwatch.org/convert/fs2SQL?#{query_params}")
+              URI.decode("#{Service::SERVICE_URL}/convert/fs2SQL?#{query_params}")
             else
-              URI.decode("http://staging-api.globalforestwatch.org/convert/sql2SQL?sql=#{sql_params}")
+              URI.decode("#{Service::SERVICE_URL}/convert/sql2SQL?sql=#{sql_params}")
             end
       url += "&geostore=#{geostore}" if geostore.present?
 
