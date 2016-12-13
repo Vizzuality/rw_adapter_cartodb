@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module V1
   class ConnectorsController < ApplicationController
     before_action :set_connector,    except: :info
@@ -14,7 +15,7 @@ module V1
         @dataset = Dataset.new(meta_data_params)
         @dataset.save
         notify(@dataset.id, 'saved')
-        render json: { success: true, message: 'Dataset created' }, status: 201
+        render json: { success: true, message: "Dataset with id: #{@dataset.id} created" }, status: 201
       rescue
         notify(connector_params[:id])
         render json: { success: false, message: 'Error creating dataset' }, status: 422
@@ -68,13 +69,15 @@ module V1
         @query_filter['groupByFieldsForStatistics'] = params[:groupByFieldsForStatistics] if params[:groupByFieldsForStatistics].present?
         @query_filter['outStatistics']              = params[:outStatistics]              if params[:outStatistics].present?
         @query_filter['statisticType']              = params[:statisticType]              if params[:statisticType].present?
-        # For convert endpoint checkSQL
+        # For convert endpoint sql2SQL
         @query_filter['sql']                        = params[:sql]                        if params[:sql].present?
+        # Geostore
+        @query_filter['geostore']                   = params[:geostore]                   if params[:geostore].present?
       end
 
       def set_uri
         @uri = {}
-        @uri['api_gateway_url'] = ENV['API_GATEWAY_URL'] if ENV['API_GATEWAY_URL'].present?
+        @uri['api_gateway_url'] = Service::SERVICE_URL
         @uri['full_path']       = request.fullpath
       end
 

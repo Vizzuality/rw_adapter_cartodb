@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'curb'
 require 'uri'
 require 'oj'
@@ -20,8 +21,15 @@ class CartodbService
 
     url = URI.encode(@connect_data_url[/[^\?]+/])
     if url.include?('/tables/')
-      url = URI(url)
-      url = "#{url.scheme}://#{url.host}/api/v2/sql"
+      if url.include?('/u/')
+        url = URI(url)
+        url_sub  = url.path.split(/u|tables/)[1].gsub('/','')
+        url_host = 'carto.com'
+        url = "#{url.scheme}://#{url_sub}.#{url_host}/api/v2/sql"
+      else
+        url = URI(url)
+        url = "#{url.scheme}://#{url.host}/api/v2/sql"
+      end
     end
     url += query_to_run
 
@@ -40,7 +48,7 @@ class CartodbService
     end
 
     def to_method
-      @sql.present? ? 'checkSQL' : 'fs2SQL'
+      @sql.present? ? 'sql2SQL' : 'fs2SQL'
     end
 
     def sql_params
@@ -58,8 +66,9 @@ class CartodbService
       query_path += "outStatistics=#{@outStatistics}&"                           if @outStatistics.present?
       query_path += "statisticType=#{@statisticType}&"                           if @statisticType.present?
       sql_path    = "#{sql_params}"                                              if sql_params.present?
+      geostore    = @geostore                                                    if @geostore.present?
 
-      filter  = QueryService.connect_to_query_service(to_method, query_path, sql_path)
+      filter  = QueryService.connect_to_query_service(to_method, query_path, sql_path, geostore)
       filter += Filters::Limit.apply_limit(@limit) if @limit.present? && !@limit.include?('all')
       filter
     end

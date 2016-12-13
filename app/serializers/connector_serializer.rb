@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ConnectorSerializer < ApplicationSerializer
   attributes :clone_url, :data
 
@@ -14,17 +15,18 @@ class ConnectorSerializer < ApplicationSerializer
   end
 
   def uri
-    "#{@uri['api_gateway_url']}#{@uri['full_path']}"
+    "#{@uri['full_path']}"
   end
 
   def clone_uri
-    "#{@uri['api_gateway_url']}/datasets/#{object.id}/clone"
+    "/dataset/#{object.id}/clone"
   end
 
   def body_params
     {
       "dataset" => {
-        "dataset_url" => "#{URI.parse(uri)}"
+        "dataset_url" => "#{URI.parse(uri)}",
+        "application" => ["your","apps"]
       }
     }
   end
