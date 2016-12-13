@@ -9,7 +9,11 @@
         "paramProvider": "dataset",
         "dataProvider": "dataset",
         "filters":{
-            "provider": "cartodb"
+          "data": {
+              "attributes": {
+                "provider": "cartodb"
+              }
+            }
         },
         "endpoints": [{
             "method": "POST",
@@ -24,7 +28,11 @@
         "paramProvider": "dataset",
         "dataProvider": "dataset",
         "filters":{
-            "provider": "cartodb"
+          "data": {
+              "attributes": {
+                "provider": "cartodb"
+              }
+            }
         },
         "endpoints": [{
             "method": "POST",
@@ -39,7 +47,11 @@
         "paramProvider": "dataset",
         "dataProvider": "dataset",
         "filters":{
-            "provider": "cartodb"
+          "data": {
+              "attributes": {
+                "provider": "cartodb"
+              }
+            }
         },
         "endpoints": [{
             "method": "POST",
@@ -51,7 +63,6 @@
       {
         "url": "/rest-datasets/cartodb",
         "method": "POST",
-        "authenticated": true,
         "endpoints": [{
             "method": "POST",
             "baseUrl": "http://localhost:3005",
@@ -61,7 +72,6 @@
       {
         "url": "/rest-datasets/cartodb/:id",
         "method": "POST",
-        "authenticated": true,
         "endpoints": [{
             "method": "POST",
             "baseUrl": "http://localhost:3005",
@@ -71,7 +81,6 @@
       {
         "url": "/rest-datasets/cartodb/:id",
         "method": "DELETE",
-        "authenticated": true,
         "endpoints": [{
             "method": "DELETE",
             "baseUrl": "http://localhost:3005",
