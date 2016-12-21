@@ -4,7 +4,6 @@ require 'typhoeus'
 require 'uri'
 require 'oj'
 require 'yajl'
-require 'set'
 
 module ConnectorService
   FLUSH_EVERY = 500

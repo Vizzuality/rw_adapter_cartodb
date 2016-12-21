@@ -7,9 +7,9 @@ module V1
     before_action :disable_gc,       only:   :show
     before_action :set_connector,    except: :info
     before_action :set_query_filter, except: :info
-    before_action :set_data,         only:   :show
     before_action :set_uri,          except: :info
     before_action :set_dataset,      only:   [:show, :update, :destroy]
+    before_action :set_data,         only:   :show
     after_action  :enable_gc,        only:   :show
 
     def show
