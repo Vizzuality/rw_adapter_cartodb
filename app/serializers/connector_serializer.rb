@@ -11,7 +11,7 @@ class ConnectorSerializer < ApplicationSerializer
   end
 
   def data
-    object.data(@query_filter)
+    @data
   end
 
   def uri
@@ -35,5 +35,6 @@ class ConnectorSerializer < ApplicationSerializer
     super
     @query_filter = options[:query_filter]
     @uri          = options[:uri]
+    @data         = options[:data]
   end
 end
