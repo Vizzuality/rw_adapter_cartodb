@@ -130,7 +130,7 @@ module V1
 
       def stream_data_array(data)
         return data if Rails.env.test?
-        headers["Content-Disposition"] = 'attachment'
+        headers["Content-Disposition"] = 'inline'
         headers["Content-Type"]        = 'application/json; charset=utf-8'
         headers["Content-Encoding"]    = 'deflate'
 
