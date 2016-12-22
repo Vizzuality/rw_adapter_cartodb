@@ -1,13 +1,19 @@
-# frozen_string_literal: true
 module V1
   class ConnectorsController < ApplicationController
+    include ActionController::Live
+
+    FLUSH_EVERY = 500
+
+    before_action :disable_gc,       only:   :show
     before_action :set_connector,    except: :info
     before_action :set_query_filter, except: :info
     before_action :set_uri,          except: :info
-    before_action :set_dataset,      only: [:show, :update, :destroy]
+    before_action :set_dataset,      only:   [:show, :update, :destroy]
+    before_action :set_data,         only:   :show
+    after_action  :enable_gc,        only:   :show
 
     def show
-      render json: @connector, serializer: ConnectorSerializer, query_filter: @query_filter, root: false, uri: @uri
+      render json: @connector, serializer: ConnectorSerializer, query_filter: @query_filter, root: false, uri: @uri, data: stream_data_array(@data)
     end
 
     def create
@@ -75,6 +81,10 @@ module V1
         @query_filter['geostore']                   = params[:geostore]                   if params[:geostore].present?
       end
 
+      def set_data
+        @data = @connector.data(@query_filter)
+      end
+
       def set_uri
         @uri = {}
         @uri['api_gateway_url'] = Service::SERVICE_URL
@@ -95,9 +105,9 @@ module V1
 
       def clone_url
         data = {}
-        data['http_method'] = 'POST'
-        data['url']         = "#{URI.parse(clone_uri)}"
-        data['body']        = body_params
+        data['httpMethod'] = 'POST'
+        data['url']        = "#{URI.parse(clone_uri)}"
+        data['body']       = body_params
         data
       end
 
@@ -112,9 +122,57 @@ module V1
       def body_params
         {
           "dataset" => {
-            "dataset_url" => "#{URI.parse(uri)}"
-          }
+            "datasetUrl" => "#{URI.parse(uri)}"
+          },
+          "application" => ["your", "apps"]
         }
+      end
+
+      def stream_data_array(data)
+        return data if Rails.env.test?
+        headers["Content-Disposition"] = 'attachment'
+        headers["Content-Type"]        = 'application/json; charset=utf-8'
+        headers["Content-Encoding"]    = 'deflate'
+
+        deflate = Zlib::Deflate.new
+
+        buffer = "{\n"
+        buffer << '"cloneUrl": '
+        buffer << JSON.pretty_generate(clone_url)
+        buffer << ",\n"
+        buffer << '"data": '
+        buffer << "[\n  "
+
+        data.each_with_index do |object, i|
+          buffer << ",\n  " unless i.zero?
+          buffer << JSON.pretty_generate(object, depth: 1)
+
+          if (i % FLUSH_EVERY).zero?
+            write(deflate, buffer)
+            buffer = ""
+          end
+        end
+
+        buffer << "\n]\n}\n"
+
+        write(deflate, buffer)
+        write(deflate, nil) # Flush deflate.
+        response.stream.close
+      end
+
+      def write(deflate, data)
+        deflated = deflate.deflate(data)
+        response.stream.write(deflated)
+      end
+
+      def disable_gc
+        GC.disable
+      end
+
+      def enable_gc
+        ActiveRecord::Base.connection.close
+        response.stream.close
+        GC.start(full_mark: false, immediate_sweep: false)
       end
   end
 end

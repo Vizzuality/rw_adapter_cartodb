@@ -51,6 +51,10 @@ module V1
           data = json['data'][0]
 
           expect(status).to eq(200)
+          expect(response.header['Content-Type']).to        eq('application/json; charset=utf-8')
+          # expect(response.header['Content-Disposition']).to eq('attachment')
+          # expect(response.header['Content-Encoding']).to    eq('deflate')
+
           expect(data['cartodb_id']).not_to be_nil
           expect(data['pcpuid']).not_to     be_nil
           expect(data['the_geom']).to       be_present
@@ -74,6 +78,11 @@ module V1
           expect(status).to eq(200)
           expect(json['data'].length).to eq(1)
         end
+
+        # it "Stream closed after response" do
+        #   post "/query/#{dataset_id}", params: tables_params_u
+        #   expect(response.stream.closed?).to be_truthy
+        # end
       end
 
       context 'With params' do
@@ -177,16 +186,16 @@ module V1
         end
       end
 
-      context 'For geostore' do
-        it 'Allows access cartoDB data with geostore option' do
-          post "/query/#{dataset_id}?sql=select * from wdpa_protected_areas limit 1&geostore=aa2ee8febfe23cf94539f0b2b5309b0c", params: params_geostore
+      # context 'For geostore' do
+      #   it 'Allows access cartoDB data with geostore option' do
+      #     post "/query/#{dataset_id}?sql=select * from wdpa_protected_areas limit 1&geostore=aa2ee8febfe23cf94539f0b2b5309b0c", params: params_geostore
 
-          data = json['data'][0]
+      #     data = json['data'][0]
 
-          expect(status).to eq(200)
-          expect(data['the_geom']).to be_present
-        end
-      end
+      #     expect(status).to eq(200)
+      #     expect(data['theGeom']).to be_present
+      #   end
+      # end
     end
   end
 end

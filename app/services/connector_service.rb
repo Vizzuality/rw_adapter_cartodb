@@ -4,9 +4,10 @@ require 'typhoeus'
 require 'uri'
 require 'oj'
 require 'yajl'
-require 'set'
 
 module ConnectorService
+  FLUSH_EVERY = 500
+
   class << self
     def connect_to_dataset_service(dataset_id, status)
       status = case status
@@ -27,6 +28,7 @@ module ConnectorService
     end
 
     def connect_to_provider(connector_url, data_path=nil, table_name=nil, attr_path=nil)
+      ActiveRecord::Base.connection.close
       if connector_url.include?('/tables/')
         select_limit = "select * from #{table_name} limit 1"
         if connector_url.include?('/u/')
@@ -51,19 +53,18 @@ module ConnectorService
 
       Typhoeus::Config.memoize = true
       hydra    = Typhoeus::Hydra.new max_concurrency: 100
-      @request = Typhoeus::Request.new(URI.escape(query_url), method: :post, headers: headers, body: { q: body_params }.to_json)
+      @request = Typhoeus::Request.new(URI.escape(query_url), method: :post, headers: headers, body: { q: body_params }.to_json, accept_encoding: 'gzip')
 
       @request.on_complete do |response|
         if response.success?
           if data_path.present?
-            set   = response_processor(data_path, response)
-            @data = set
+            @data = response_processor(data_path, response)
           elsif attr_path.present?
             parser = Yajl::Parser.new
-            @data  = parser.parse(response.body.force_encoding(Encoding::UTF_8))[attr_path] || parser.parse(response.body.force_encoding(Encoding::UTF_8))
+            @data  = parser.parse(response.body)[attr_path] || parser.parse(response.body)
           else
             parser = Yajl::Parser.new
-            @data  = parser.parse(response.body.force_encoding(Encoding::UTF_8))
+            @data  = parser.parse(response.body)
           end
         elsif response.timed_out?
           @data = 'got a time out'
@@ -79,22 +80,17 @@ module ConnectorService
     end
 
     def response_processor(data_path, response)
-      batch      = []
-      batch_size = 10000
-      parser     = YAJI::Parser.new(response.body.force_encoding(Encoding::UTF_8))
-      set        = Set.new []
-
-      parser.each("/#{data_path}/") do |obj|
-        batch << obj
-        if batch.size >= batch_size
-          set   = set | batch.to_set
-          batch = []
+      parser = YAJI::Parser.new(response.body)
+      i      = 0
+      Enumerator.new do |set|
+        parser.each("/#{data_path}/") do |obj|
+          set << obj.symbolize_keys!
+          i = i + 1
+          if (i % FLUSH_EVERY).zero?
+            GC.start(full_mark: false, immediate_sweep: false)
+          end
         end
       end
-      if batch.size <= batch_size
-        set = set | batch.to_set
-      end
-      set.freeze
     end
   end
 end
